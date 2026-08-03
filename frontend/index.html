@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description" content="FuelWise helps you estimate fuel costs, compare routes and plan your journey.">
+
+    <title>FuelWise</title>
+
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/pages.css">
+</head>
+
+<body>
+
+    <header class="navbar">
+
+        <div class="container navbar-container">
+
+            <a href="#" class="logo" aria-label="FuelWise Home">
+                Fuel<span>Wise</span>
+            </a>
+
+            <nav aria-label="Main Navigation">
+
+                <ul class="nav-links">
+
+                    <li>
+                        <a href="#">Home</a>
+                    </li>
+
+                    <li>
+                        <a href="#trip-planner">Trip Planner</a>
+                    </li>
+
+                    <li>
+                        <a href="#vehicles">Vehicles</a>
+                    </li>
+
+                    <li>
+                        <a href="#fuel-prices">Fuel Prices</a>
+                    </li>
+
+                    <li>
+                        <a href="#about">About</a>
+                    </li>
+
+                </ul>
+
+            </nav>
+
+            <div class="nav-buttons">
+
+                <button type="button" class="login-btn">
+                    Login
+                </button>
+
+                <button type="button" class="primary-btn">
+                    Get Started
+                </button>
+
+            </div>
+
+        </div>
+
+    </header>
+
+    <main>
+
+        <section class="hero">
+
+            <div class="container hero-container">
+
+                <div class="hero-content">
+
+                    <p class="hero-badge">
+
+                        <i data-lucide="car-front" aria-hidden="true"></i>
+
+                        Smart Trip Planner
+
+                    </p>
+
+                    <h1>
+                        Plan Smarter.
+                        <span>Travel Cheaper.</span>
+                    </h1>
+
+                    <p class="hero-description">
+                        FuelWise helps you estimate fuel costs,
+                        compare routes and plan your journey
+                        before you even hit the road.
+                    </p>
+
+                    <div class="hero-buttons">
+
+                        <button type="button" class="primary-btn">
+                            Start Planning
+
+                            <i data-lucide="arrow-right" aria-hidden="true"></i>
+                        </button>
+
+                        <button type="button" class="secondary-btn">
+                            Learn More
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <article class="hero-card">
+
+                    <div class="hero-card-header">
+
+                        <div>
+
+                            <p class="hero-card-label">
+                                Your journey
+                            </p>
+
+                            <h2>Trip Summary</h2>
+
+                        </div>
+
+                        <div class="hero-card-icon">
+
+                            <i data-lucide="route" aria-hidden="true"></i>
+
+                        </div>
+
+                    </div>
+
+                    <div class="trip-item">
+
+                        <span class="trip-label">
+
+                            <i data-lucide="map-pin" aria-hidden="true"></i>
+
+                            From
+
+                        </span>
+
+                        <strong>Istanbul</strong>
+
+                    </div>
+
+                    <div class="trip-item">
+
+                        <span class="trip-label">
+
+                            <i data-lucide="flag" aria-hidden="true"></i>
+
+                            To
+
+                        </span>
+
+                        <strong>Izmir</strong>
+
+                    </div>
+
+                    <div class="trip-item">
+
+                        <span class="trip-label">
+
+                            <i data-lucide="route" aria-hidden="true"></i>
+
+                            Distance
+
+                        </span>
+
+                        <strong>483 km</strong>
+
+                    </div>
+
+                    <div class="trip-item">
+
+                        <span class="trip-label">
+
+                            <i data-lucide="fuel" aria-hidden="true"></i>
+
+                            Fuel
+
+                        </span>
+
+                        <strong>18.4 L</strong>
+
+                    </div>
+
+                    <div class="trip-item">
+
+                        <span class="trip-label">
+
+                            <i data-lucide="wallet" aria-hidden="true"></i>
+
+                            Cost
+
+                        </span>
+
+                        <strong>₺1,032</strong>
+
+                    </div>
+
+                </article>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <section class="planner-section" id="trip-planner">
+
+        <div class="container">
+
+            <div class="section-heading">
+
+                <p class="section-badge">
+                    <i data-lucide="route" aria-hidden="true"></i>
+                    Trip Planner
+                </p>
+
+                <h2>
+                    Calculate your journey
+                    <span>in seconds.</span>
+                </h2>
+
+                <p>
+                    Enter your vehicle and trip details to estimate fuel usage,
+                    total cost and required fuel stops.
+                </p>
+
+            </div>
+
+            <div class="planner-layout">
+
+                <form class="planner-form" id="fuel-form">
+
+                    <div class="form-header">
+
+                        <div>
+
+                            <p class="form-eyebrow">Journey details</p>
+
+                            <h3>Plan your trip</h3>
+
+                        </div>
+
+                        <div class="form-header-icon">
+                            <i data-lucide="navigation" aria-hidden="true"></i>
+                        </div>
+
+                    </div>
+
+                    <div class="form-grid">
+
+                        <div class="form-group form-group-full">
+
+                            <label for="vehicle">
+                                Vehicle
+                            </label>
+
+                            <div class="field-wrapper">
+
+                                <i data-lucide="car-front" aria-hidden="true"></i>
+
+                                <select id="vehicle" name="vehicle">
+
+                                    <option value="">
+                                        Manual entry
+                                    </option>
+
+                                    <option value="forza">
+                                        Honda Forza 250
+                                    </option>
+
+                                    <option value="cl250">
+                                        Honda CL250
+                                    </option>
+
+                                    <option value="pcx">
+                                        Honda PCX 125
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label for="distance">
+                                Distance
+                            </label>
+
+                            <div class="field-wrapper">
+
+                                <i data-lucide="route" aria-hidden="true"></i>
+
+                                <input type="number" id="distance" name="distance" placeholder="500" min="0" step="0.1"
+                                    required>
+
+                                <span class="field-unit">km</span>
+
+                            </div>
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label for="consumption">
+                                Average consumption
+                            </label>
+
+                            <div class="field-wrapper">
+
+                                <i data-lucide="gauge" aria-hidden="true"></i>
+
+                                <input type="number" id="consumption" name="consumption" placeholder="5.5" min="0"
+                                    step="0.1" required>
+
+                                <span class="field-unit">L/100 km</span>
+
+                            </div>
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label for="tank-capacity">
+                                Tank capacity
+                            </label>
+
+                            <div class="field-wrapper">
+
+                                <i data-lucide="fuel" aria-hidden="true"></i>
+
+                                <input type="number" id="tank-capacity" name="tank-capacity" placeholder="11.7" min="0"
+                                    step="0.1" required>
+
+                                <span class="field-unit">L</span>
+
+                            </div>
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label for="fuel-price">
+                                Fuel price
+                            </label>
+
+                            <div class="field-wrapper">
+
+                                <i data-lucide="badge-turkish-lira" aria-hidden="true"></i>
+
+                                <input type="number" id="fuel-price" name="fuel-price" placeholder="52.00" min="0"
+                                    step="0.01" required>
+
+                                <span class="field-unit">₺/L</span>
+
+                            </div>
+
+                        </div>
+
+                        <div class="form-group form-group-full">
+
+                            <label>
+                                Trip type
+                            </label>
+
+                            <div class="trip-type-options">
+
+                                <label class="trip-type-option">
+
+                                    <input type="radio" name="trip-type" value="one-way" checked>
+
+                                    <span>
+
+                                        <i data-lucide="move-right" aria-hidden="true"></i>
+
+                                        Tek yön
+
+                                    </span>
+
+                                </label>
+
+                                <label class="trip-type-option">
+
+                                    <input type="radio" name="trip-type" value="round-trip">
+
+                                    <span>
+
+                                        <i data-lucide="repeat-2" aria-hidden="true"></i>
+
+                                        Gidiş-dönüş
+
+                                    </span>
+
+                                </label>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <p class="form-error" id="error-message"></p>
+
+                    <p class="form-success" id="success-message"></p>
+
+                    <button type="submit" class="primary-btn calculate-btn">
+
+                        <i data-lucide="calculator" aria-hidden="true"></i>
+
+                        Calculate trip
+
+                    </button>
+
+                </form>
+
+                <aside class="results-panel">
+
+                    <div class="results-header">
+
+                        <div>
+
+                            <p class="form-eyebrow">Calculation</p>
+
+                            <h3>Trip Results</h3>
+
+                        </div>
+
+                        <div class="results-status">
+                            Live Preview
+                        </div>
+
+                    </div>
+
+                    <div class="results-grid">
+
+                        <article class="result-card">
+
+                            <div class="result-icon">
+                                <i data-lucide="route"></i>
+                            </div>
+
+                            <div>
+
+                                <p>Total Distance</p>
+
+                                <strong id="distance-result">
+                                    0 km
+                                </strong>
+
+                            </div>
+
+                        </article>
+
+                        <article class="result-card">
+
+                            <div class="result-icon">
+                                <i data-lucide="fuel"></i>
+                            </div>
+
+                            <div>
+
+                                <p>Fuel Required</p>
+
+                                <strong id="fuel-result">
+                                    0.00 L
+                                </strong>
+
+                            </div>
+
+                        </article>
+
+                        <article class="result-card result-card-highlight">
+
+                            <div class="result-icon">
+                                <i data-lucide="wallet-cards"></i>
+                            </div>
+
+                            <div>
+
+                                <p>Estimated Cost</p>
+
+                                <strong id="cost-result">
+                                    ₺0.00
+                                </strong>
+
+                            </div>
+
+                        </article>
+
+                        <article class="result-card">
+
+                            <div class="result-icon">
+                                <i data-lucide="gauge"></i>
+                            </div>
+
+                            <div>
+
+                                <p>Estimated Range</p>
+
+                                <strong id="range-result">
+                                    0 km
+                                </strong>
+
+                            </div>
+
+                        </article>
+
+                        <article class="result-card">
+
+                            <div class="result-icon">
+                                <i data-lucide="coffee"></i>
+                            </div>
+
+                            <div>
+
+                                <p>Fuel Stops</p>
+
+                                <strong id="stop-result">
+                                    0
+                                </strong>
+
+                            </div>
+
+                        </article>
+
+                    </div>
+
+                    <div class="result-note">
+
+                        <i data-lucide="info"></i>
+
+                        <p>
+                            Calculations assume that your journey starts with a full tank.
+                        </p>
+
+                    </div>
+
+                </aside>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <footer>
+    </footer>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script type="module" src="js/app.js"></script>
+
+</body>
+
+</html>
