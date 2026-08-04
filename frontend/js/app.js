@@ -9,7 +9,9 @@ import {
 
 document.addEventListener("DOMContentLoaded", () => {
 
-    lucide.createIcons();
+    if (window.lucide) {
+        window.lucide.createIcons();
+    }
 
     const fuelForm =
         document.getElementById("fuel-form");
@@ -215,8 +217,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
 
                 return `${stops} ${stops === 1
-                        ? "stop"
-                        : "stops"
+                    ? "stop"
+                    : "stops"
                     }`;
 
             }
@@ -246,3 +248,5 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log("🚀 FuelWise Started");
 
 });
+
+import "./vehicle-manager.js";

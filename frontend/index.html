@@ -211,6 +211,121 @@
 
         </section>
 
+        <section class="features-section">
+
+            <div class="container">
+
+                <div class="section-heading">
+
+                    <p class="section-badge">
+
+                        <i data-lucide="sparkles"></i>
+
+                        Why FuelWise?
+
+                    </p>
+
+                    <h2>
+
+                        Everything you need
+
+                        <span>for smarter trips.</span>
+
+                    </h2>
+
+                    <p>
+
+                        Designed to help drivers calculate costs,
+                        manage vehicles and travel more efficiently.
+
+                    </p>
+
+                </div>
+
+                <div class="features-grid">
+
+                    <article class="feature-card">
+
+                        <div class="feature-icon">
+
+                            <i data-lucide="calculator"></i>
+
+                        </div>
+
+                        <h3>Instant Calculations</h3>
+
+                        <p>
+
+                            Estimate fuel usage and total trip
+                            costs within seconds.
+
+                        </p>
+
+                    </article>
+
+                    <article class="feature-card">
+
+                        <div class="feature-icon">
+
+                            <i data-lucide="car-front"></i>
+
+                        </div>
+
+                        <h3>Vehicle Library</h3>
+
+                        <p>
+
+                            Save all of your vehicles and
+                            switch between them instantly.
+
+                        </p>
+
+                    </article>
+
+                    <article class="feature-card">
+
+                        <div class="feature-icon">
+
+                            <i data-lucide="map"></i>
+
+                        </div>
+
+                        <h3>Route Planning</h3>
+
+                        <p>
+
+                            Plan every journey with accurate
+                            distance and fuel estimates.
+
+                        </p>
+
+                    </article>
+
+                    <article class="feature-card">
+
+                        <div class="feature-icon">
+
+                            <i data-lucide="fuel"></i>
+
+                        </div>
+
+                        <h3>Live Fuel Prices</h3>
+
+                        <p>
+
+                            Coming soon with real-time fuel
+                            prices across Türkiye.
+
+                        </p>
+
+                    </article>
+
+                </div>
+
+            </div>
+
+        </section>
+
     </main>
 
     <section class="planner-section" id="trip-planner">
@@ -384,7 +499,7 @@
 
                                         <i data-lucide="move-right" aria-hidden="true"></i>
 
-                                        Tek yön
+                                        One Way
 
                                     </span>
 
@@ -398,7 +513,7 @@
 
                                         <i data-lucide="repeat-2" aria-hidden="true"></i>
 
-                                        Gidiş-dönüş
+                                        Round Trip
 
                                     </span>
 
@@ -554,7 +669,493 @@
 
     </section>
 
-    <footer>
+    <section class="vehicle-section" id="vehicles">
+
+        <div class="container">
+
+            <div class="section-heading">
+
+                <p class="section-badge">
+
+                    <i data-lucide="car-front"></i>
+
+                    Vehicle Manager
+
+                </p>
+
+                <h2>
+
+                    Manage your
+
+                    <span>vehicles.</span>
+
+                </h2>
+
+                <p>
+
+                    Save your vehicles once and use them
+                    in every trip calculation.
+
+                </p>
+
+            </div>
+
+            <div class="vehicle-layout">
+
+                <div class="vehicle-header">
+
+                    <h3>My Vehicles</h3>
+
+                    <button class="primary-btn" id="add-vehicle-btn">
+
+                        <i data-lucide="plus"></i>
+
+                        Add Vehicle
+
+                    </button>
+
+                </div>
+
+                <div id="vehicle-list" class="vehicle-list">
+
+                    <article class="vehicle-card">
+
+                        <div class="vehicle-card-top">
+
+                            <div class="vehicle-icon">
+
+                                <i data-lucide="car-front"></i>
+
+                            </div>
+
+                            <div>
+
+                                <h4>Honda Forza 250</h4>
+
+                                <p>Scooter</p>
+
+                            </div>
+
+                        </div>
+
+                        <div class="vehicle-specs">
+
+                            <div>
+
+                                <span>Consumption</span>
+
+                                <strong>3.4 L/100km</strong>
+
+                            </div>
+
+                            <div>
+
+                                <span>Tank</span>
+
+                                <strong>11.7 L</strong>
+
+                            </div>
+
+                        </div>
+
+                        <div class="vehicle-actions">
+
+                            <button class="secondary-btn">
+                                Edit
+                            </button>
+
+                            <button class="delete-btn">
+                                Delete
+                            </button>
+
+                        </div>
+
+                    </article>
+
+
+
+
+
+                    <article class="vehicle-card">
+
+                        <div class="vehicle-card-top">
+
+                            <div class="vehicle-icon">
+
+                                <i data-lucide="car-front"></i>
+
+                            </div>
+
+                            <div>
+
+                                <h4>Honda CL250</h4>
+
+                                <p>Motorcycle</p>
+
+                            </div>
+
+                        </div>
+
+                        <div class="vehicle-specs">
+
+                            <div>
+
+                                <span>Consumption</span>
+
+                                <strong>3.2 L/100km</strong>
+
+                            </div>
+
+                            <div>
+
+                                <span>Tank</span>
+
+                                <strong>12 L</strong>
+
+                            </div>
+
+                        </div>
+
+                        <div class="vehicle-actions">
+
+                            <button class="secondary-btn">
+                                Edit
+                            </button>
+
+                            <button class="delete-btn">
+                                Delete
+                            </button>
+
+                        </div>
+
+                    </article>
+
+
+
+
+
+                    <article class="vehicle-card">
+
+                        <div class="vehicle-card-top">
+
+                            <div class="vehicle-icon">
+
+                                <i data-lucide="car-front"></i>
+
+                            </div>
+
+                            <div>
+
+                                <h4>BMW 320i</h4>
+
+                                <p>Car</p>
+
+                            </div>
+
+                        </div>
+
+                        <div class="vehicle-specs">
+
+                            <div>
+
+                                <span>Consumption</span>
+
+                                <strong>7.1 L/100km</strong>
+
+                            </div>
+
+                            <div>
+
+                                <span>Tank</span>
+
+                                <strong>59 L</strong>
+
+                            </div>
+
+                        </div>
+
+                        <div class="vehicle-actions">
+
+                            <button class="secondary-btn">
+                                Edit
+                            </button>
+
+                            <button class="delete-btn">
+                                Delete
+                            </button>
+
+                        </div>
+
+                    </article>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- Vehicle Modal -->
+
+    <div class="modal-overlay" id="vehicle-modal">
+
+        <div class="vehicle-modal">
+
+            <div class="modal-header">
+
+                <h3>Add Vehicle</h3>
+
+                <button id="close-modal">
+
+                    ✕
+
+                </button>
+
+            </div>
+
+            <form id="vehicle-form">
+
+                <div class="form-group">
+
+                    <label>
+
+                        Vehicle Name
+
+                    </label>
+
+                    <input id="vehicle-name" type="text" placeholder="Honda Africa Twin">
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>
+
+                        Consumption
+
+                    </label>
+
+                    <input id="vehicle-consumption" type="number" placeholder="4.7">
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>
+
+                        Tank Capacity
+
+                    </label>
+
+                    <input id="vehicle-tank" type="number" placeholder="18.8">
+
+                </div>
+
+                <button class="primary-btn">
+
+                    Save Vehicle
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <footer class="site-footer" id="about">
+
+        <div class="container footer-container">
+
+            <div class="footer-brand">
+
+                <a href="#" class="logo footer-logo" aria-label="FuelWise Home">
+                    Fuel<span>Wise</span>
+                </a>
+
+                <p class="footer-description">
+                    Plan smarter journeys, calculate fuel costs
+                    and manage every vehicle from one place.
+                </p>
+
+                <div class="footer-socials">
+
+                    <a href="https://github.com/selimeskimumcu" target="_blank" rel="noopener noreferrer"
+                        class="social-link" aria-label="GitHub">
+
+                        <i data-lucide="github"></i>
+
+                    </a>
+
+                    <a href="https://linkedin.com/in/selimeskimumcu" target="_blank" rel="noopener noreferrer"
+                        class="social-link" aria-label="LinkedIn">
+
+                        <i data-lucide="linkedin"></i>
+
+                    </a>
+
+                    <a href="https://instagram.com/selimeskimumcu" target="_blank" rel="noopener noreferrer"
+                        class="social-link" aria-label="Instagram">
+
+                        <i data-lucide="instagram"></i>
+
+                    </a>
+
+                    <a href="#" class="social-link" aria-label="YouTube">
+
+                        <i data-lucide="youtube"></i>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+            <div class="footer-links-column">
+
+                <h3>Quick Links</h3>
+
+                <ul class="footer-links">
+
+                    <li>
+                        <a href="#">Home</a>
+                    </li>
+
+                    <li>
+                        <a href="#trip-planner">Trip Planner</a>
+                    </li>
+
+                    <li>
+                        <a href="#vehicles">Vehicles</a>
+                    </li>
+
+                    <li>
+                        <a href="#fuel-prices">Fuel Prices</a>
+                    </li>
+
+                    <li>
+                        <a href="#about">About</a>
+                    </li>
+
+                </ul>
+
+            </div>
+
+            <div class="footer-links-column">
+
+                <h3>Contact</h3>
+
+                <ul class="footer-contact-list">
+
+                    <li>
+
+                        <i data-lucide="mail" aria-hidden="true"></i>
+
+                        <a href="mailto:support@fuelwise.app">
+                            support@fuelwise.app
+                        </a>
+
+                    </li>
+
+                    <li>
+
+                        <i data-lucide="map-pin" aria-hidden="true"></i>
+
+                        <span>Istanbul, Türkiye</span>
+
+                    </li>
+
+                    <li>
+
+                        <i data-lucide="clock-3" aria-hidden="true"></i>
+
+                        <span>Mon–Fri, 09:00–17:00</span>
+
+                    </li>
+
+                </ul>
+
+            </div>
+
+            <div class="footer-stats">
+
+                <h3>Trusted by drivers</h3>
+
+                <div class="footer-stats-grid">
+
+                    <div class="footer-stat">
+
+                        <strong>2.5K+</strong>
+
+                        <span>Drivers</span>
+
+                    </div>
+
+                    <div class="footer-stat">
+
+                        <strong>6K+</strong>
+
+                        <span>Trips Planned</span>
+
+                    </div>
+
+                    <div class="footer-stat">
+
+                        <strong>98%</strong>
+
+                        <span>Satisfaction</span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="footer-quote">
+
+            <p>
+
+                Drive smarter.
+
+                Spend less.
+
+                Travel further.
+
+            </p>
+
+        </div>
+
+        <div class="container footer-bottom">
+
+            <p>
+                © 2026 FuelWise. All rights reserved.
+            </p>
+
+            <p>
+                Designed & Developed by Selim Eskimumcu.
+
+                <span class="version-badge">
+
+                    v1.0.0 Beta
+
+                </span>
+
+            </p>
+            </p>
+
+            <div class="footer-legal">
+
+                <a href="#">Privacy Policy</a>
+
+                <a href="#">Terms of Service</a>
+
+            </div>
+
+        </div>
+
     </footer>
 
     <script src="https://unpkg.com/lucide@latest"></script>
