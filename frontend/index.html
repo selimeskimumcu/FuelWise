@@ -6,6 +6,8 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
     <meta name="description" content="FuelWise helps you estimate fuel costs, compare routes and plan your journey.">
 
     <title>FuelWise</title>
@@ -13,7 +15,9 @@
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/layout.css">
     <link rel="stylesheet" href="css/components.css">
-    <link rel="stylesheet" href="css/pages.css">
+    <link rel="stylesheet" href="css/pages.css?v=20260806-3">
+    <link rel="stylesheet" href="css/login-modal.css?v=20260807-1">
+    <link rel="stylesheet" href="css/i18n.css">
 </head>
 
 <body>
@@ -22,7 +26,7 @@
 
         <div class="container navbar-container">
 
-            <a href="#" class="logo" aria-label="FuelWise Home">
+            <a href="index.html" class="logo" aria-label="FuelWise Home">
                 Fuel<span>Wise</span>
             </a>
 
@@ -31,7 +35,7 @@
                 <ul class="nav-links">
 
                     <li>
-                        <a href="index.html">Home</a>
+                        <a href="index.html" class="active">Home</a>
                     </li>
 
                     <li>
@@ -60,9 +64,9 @@
                     Login
                 </button>
 
-                <button type="button" class="primary-btn">
-                    Get Started
-                </button>
+                <a href="pages/register.html" class="primary-btn">
+                    Register
+                </a>
 
             </div>
 
@@ -99,15 +103,15 @@
 
                     <div class="hero-buttons">
 
-                        <button type="button" class="primary-btn">
+                        <a href="pages/trip-planner.html" class="primary-btn">
                             Start Planning
 
                             <i data-lucide="arrow-right" aria-hidden="true"></i>
-                        </button>
+                        </a>
 
-                        <button type="button" class="secondary-btn">
+                        <a href="pages/about.html" class="secondary-btn">
                             Learn More
-                        </button>
+                        </a>
 
                     </div>
 
@@ -327,6 +331,8 @@
         </section>
 
     </main>
+
+    <template id="removed-home-tools">
 
     <section class="planner-section" id="trip-planner">
 
@@ -671,6 +677,13 @@
 
     <section class="vehicle-section" id="vehicles">
 
+        <video class="vehicle-background-video" autoplay muted loop playsinline preload="metadata" aria-hidden="true">
+            <source src="assets/videos/vehicle-manager-bg.webm" type="video/webm">
+            <source src="assets/videos/vehicle-manager-bg.mp4" type="video/mp4">
+        </video>
+
+        <div class="vehicle-video-overlay" aria-hidden="true"></div>
+
         <div class="container">
 
             <div class="section-heading">
@@ -904,7 +917,7 @@
 
             <div class="modal-header">
 
-                <h3>Add Vehicle</h3>
+                <h3 id="vehicle-modal-title">Add Vehicle</h3>
 
                 <button id="close-modal">
 
@@ -918,41 +931,100 @@
 
                 <div class="form-group">
 
-                    <label>
+                    <label for="vehicle-name">
 
                         Vehicle Name
 
                     </label>
 
-                    <input id="vehicle-name" type="text" placeholder="Honda Africa Twin">
+                    <input id="vehicle-name" type="text" placeholder="My Honda" required maxlength="100">
 
                 </div>
 
                 <div class="form-group">
 
-                    <label>
+                    <label for="vehicle-make">Make</label>
+
+                    <input id="vehicle-make" type="text" placeholder="Honda" maxlength="60">
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="vehicle-model">Model</label>
+
+                    <input id="vehicle-model" type="text" placeholder="Forza 250" maxlength="80">
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="vehicle-year">Year</label>
+
+                    <input id="vehicle-year" type="number" placeholder="2025" min="1950" max="2100">
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="vehicle-type">Vehicle Type</label>
+
+                    <select id="vehicle-type" required>
+                        <option value="car">Car</option>
+                        <option value="motorcycle">Motorcycle</option>
+                        <option value="truck">Truck</option>
+                        <option value="bus">Bus</option>
+                        <option value="semi_truck">Semi Truck</option>
+                    </select>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="vehicle-fuel-type">Fuel Type</label>
+
+                    <select id="vehicle-fuel-type" required>
+                        <option value="gasoline">Gasoline</option>
+                        <option value="diesel">Diesel</option>
+                        <option value="lpg">LPG</option>
+                    </select>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="vehicle-consumption">
 
                         Consumption
 
                     </label>
 
-                    <input id="vehicle-consumption" type="number" placeholder="4.7">
+                    <input id="vehicle-consumption" type="number" placeholder="4.7" min="0.1" max="100" step="0.1" required>
 
                 </div>
 
                 <div class="form-group">
 
-                    <label>
+                    <label for="vehicle-tank">
 
                         Tank Capacity
 
                     </label>
 
-                    <input id="vehicle-tank" type="number" placeholder="18.8">
+                    <input id="vehicle-tank" type="number" placeholder="18.8" min="0.1" max="1000" step="0.1" required>
 
                 </div>
 
-                <button class="primary-btn">
+                <label class="vehicle-default-option">
+                    <input id="vehicle-default" type="checkbox">
+                    <span>Use as default vehicle</span>
+                </label>
+
+                <p class="vehicle-form-message" id="vehicle-form-message" role="alert"></p>
+
+                </div>
+
+                <button class="primary-btn" id="vehicle-submit" type="submit">
 
                     Save Vehicle
 
@@ -964,13 +1036,15 @@
 
     </div>
 
+    </template>
+
     <footer class="site-footer" id="about">
 
         <div class="container footer-container">
 
             <div class="footer-brand">
 
-                <a href="#" class="logo footer-logo" aria-label="FuelWise Home">
+                <a href="index.html" class="logo footer-logo" aria-label="FuelWise Home">
                     Fuel<span>Wise</span>
                 </a>
 
@@ -984,27 +1058,27 @@
                     <a href="https://github.com/selimeskimumcu" target="_blank" rel="noopener noreferrer"
                         class="social-link" aria-label="GitHub">
 
-                        <i data-lucide="github"></i>
+                        <i class="fa-brands fa-github" aria-hidden="true"></i>
 
                     </a>
 
                     <a href="https://linkedin.com/in/selimeskimumcu" target="_blank" rel="noopener noreferrer"
                         class="social-link" aria-label="LinkedIn">
 
-                        <i data-lucide="linkedin"></i>
+                        <i class="fa-brands fa-linkedin-in" aria-hidden="true"></i>
 
                     </a>
 
                     <a href="https://instagram.com/selimeskimumcu" target="_blank" rel="noopener noreferrer"
                         class="social-link" aria-label="Instagram">
 
-                        <i data-lucide="instagram"></i>
+                        <i class="fa-brands fa-instagram" aria-hidden="true"></i>
 
                     </a>
 
                     <a href="#" class="social-link" aria-label="YouTube">
 
-                        <i data-lucide="youtube"></i>
+                        <i class="fa-brands fa-youtube" aria-hidden="true"></i>
 
                     </a>
 
@@ -1053,8 +1127,8 @@
 
                         <i data-lucide="mail" aria-hidden="true"></i>
 
-                        <a href="mailto:support@fuelwise.app">
-                            support@fuelwise.app
+                        <a href="mailto:fuelwise.support@gmail.com">
+                            fuelwise.support@gmail.com
                         </a>
 
                     </li>
@@ -1160,7 +1234,9 @@
     </footer>
 
     <script src="https://unpkg.com/lucide@latest"></script>
-    <script type="module" src="js/app.js"></script>
+    <script src="js/login-modal.js?v=20260807-1"></script>
+    <script src="js/auth-client.js?v=20260806-4"></script>
+    <script src="js/i18n.js?v=20260806-5"></script>
 
 </body>
 

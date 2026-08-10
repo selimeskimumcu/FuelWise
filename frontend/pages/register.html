@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Create your FuelWise account and start planning smarter journeys.">
+    <title>Register | FuelWise</title>
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/pages.css">
+    <link rel="stylesheet" href="../css/register.css">
+    <link rel="stylesheet" href="../css/i18n.css">
+</head>
+<body class="register-page">
+    <main class="register-shell">
+        <a href="../index.html" class="register-logo" aria-label="FuelWise Home">Fuel<span>Wise</span></a>
+
+        <section class="register-card" aria-labelledby="register-title">
+            <div class="register-heading">
+                <p class="section-badge"><i data-lucide="user-plus"></i>Create account</p>
+                <h1 id="register-title">Join FuelWise</h1>
+                <p>Create your profile to save vehicles and plan every journey in one place.</p>
+            </div>
+
+            <form id="register-form" novalidate>
+                <div class="register-grid">
+                    <div class="register-field">
+                        <label for="full-name">Full name</label>
+                        <div class="register-input"><i data-lucide="user"></i><input type="text" id="full-name" name="fullName" placeholder="Your full name" autocomplete="name" required></div>
+                    </div>
+                    <div class="register-field">
+                        <label for="username">Username</label>
+                        <div class="register-input"><i data-lucide="at-sign"></i><input type="text" id="username" name="username" placeholder="Choose a username" autocomplete="username" minlength="3" required></div>
+                    </div>
+                    <div class="register-field register-field-full">
+                        <label for="email">Email address</label>
+                        <div class="register-input"><i data-lucide="mail"></i><input type="email" id="email" name="email" placeholder="you@example.com" autocomplete="email" required></div>
+                    </div>
+                    <div class="register-field">
+                        <label for="register-password">Password</label>
+                        <div class="register-input"><i data-lucide="lock-keyhole"></i><input type="password" id="register-password" name="password" placeholder="Create a strong password" autocomplete="new-password" minlength="8" required></div>
+                    </div>
+                    <div class="register-field">
+                        <label for="confirm-password">Confirm password</label>
+                        <div class="register-input"><i data-lucide="shield-check"></i><input type="password" id="confirm-password" name="confirmPassword" placeholder="Repeat your password" autocomplete="new-password" minlength="8" required></div>
+                    </div>
+                </div>
+
+                <p class="register-caps" role="status"><i data-lucide="triangle-alert"></i>Caps Lock is on</p>
+
+                <div class="password-rules" aria-label="Password requirements">
+                    <p>Your password must include:</p>
+                    <ul><li data-rule="length">At least 8 characters</li><li data-rule="upper">One uppercase letter</li><li data-rule="number">One number</li></ul>
+                </div>
+
+                <label class="terms-check"><input type="checkbox" id="terms" required><span>I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.</span></label>
+                <p class="register-message" id="register-message" role="alert"></p>
+                <button type="submit" class="primary-btn register-submit"><i data-lucide="user-plus"></i>Create Account</button>
+            </form>
+
+            <p class="register-login">Already have an account? <button type="button" id="open-login">Login</button></p>
+        </section>
+
+        <p class="register-motto">Plan smarter. Drive farther. Spend wiser.</p>
+    </main>
+
+    <footer class="register-footer">
+        <div class="register-footer-inner">
+            <p>© 2026 FuelWise. All rights reserved.</p>
+            <p>Designed &amp; Developed by Selim Eskimumcu <span class="version-badge">v1.0.0 Beta</span></p>
+            <div class="register-legal">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="../js/register.js"></script>
+    <script src="../js/i18n.js?v=20260806-3"></script>
+</body>
+</html>

@@ -1,12 +1,3 @@
-import {
-    getVehicleById
-} from "./vehicles.js";
-
-import {
-    calculateTrip,
-    isValidTripInput
-} from "./calculator.js";
-
 document.addEventListener("DOMContentLoaded", () => {
 
     if (window.lucide) {
@@ -31,6 +22,23 @@ document.addEventListener("DOMContentLoaded", () => {
     const fuelPriceInput =
         document.getElementById("fuel-price");
 
+    const fuelTypeInput =
+        document.getElementById("fuel-type");
+
+    const fuelPriceStatus =
+        document.getElementById("fuel-price-status");
+
+    const startLabel =
+        document.getElementById("route-start-label");
+
+    const epdkLoader =
+        document.getElementById("epdk-loader");
+
+    let fuelPriceRequestVersion = 0;
+
+    const trafficConditionInput =
+        document.getElementById("traffic-condition");
+
     const distanceResult =
         document.getElementById("distance-result");
 
@@ -54,10 +62,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     vehicleSelect.addEventListener("change", () => {
 
-        const vehicle =
-            getVehicleById(vehicleSelect.value);
+        const selectedOption = vehicleSelect.selectedOptions[0];
+        const consumption = Number(selectedOption?.dataset.consumption);
+        const tankCapacity = Number(selectedOption?.dataset.tankCapacity);
+        const fuelType = selectedOption?.dataset.fuelType;
 
-        if (!vehicle) {
+        if (!vehicleSelect.value || !consumption || !tankCapacity) {
 
             consumptionInput.value = "";
 
@@ -67,15 +77,118 @@ document.addEventListener("DOMContentLoaded", () => {
 
         }
 
-        consumptionInput.value =
-            vehicle.consumption;
+        consumptionInput.value = consumption;
 
-        tankCapacityInput.value =
-            vehicle.tankCapacity;
+        tankCapacityInput.value = tankCapacity;
+
+        if (fuelType && ["gasoline", "diesel", "lpg"].includes(fuelType)) {
+            fuelTypeInput.value = fuelType;
+            loadOfficialFuelPrice();
+        }
 
     });
 
-    fuelForm.addEventListener("submit", (event) => {
+    function populateVehicleOptions(userVehicles = []) {
+        const currentValue = vehicleSelect.value;
+        vehicleSelect.innerHTML = '<option value="">Manual entry</option>';
+        userVehicles.forEach(vehicle => {
+            const option = document.createElement("option");
+            option.value = vehicle.id;
+            option.textContent = vehicle.name;
+            option.dataset.consumption = vehicle.consumption;
+            option.dataset.tankCapacity = vehicle.tank_capacity;
+            option.dataset.fuelType = vehicle.fuel_type;
+            option.selected = vehicle.id === currentValue || (!currentValue && vehicle.is_default);
+            vehicleSelect.append(option);
+        });
+        if (vehicleSelect.value) vehicleSelect.dispatchEvent(new Event("change"));
+    }
+
+    async function loadSavedVehicles() {
+        try {
+            const user = await window.FuelWiseAuth?.getCurrentUser();
+            if (!user) {
+                populateVehicleOptions();
+                return;
+            }
+            const response = await fetch("/api/v1/vehicles", { credentials: "include" });
+            populateVehicleOptions(response.ok ? await response.json() : []);
+        } catch (error) {
+            console.error("Saved vehicles could not be loaded:", error);
+            populateVehicleOptions();
+        }
+    }
+
+    document.addEventListener("fuelwise:vehicles-updated", event => populateVehicleOptions(event.detail));
+    document.addEventListener("fuelwise:authenticated", loadSavedVehicles);
+    loadSavedVehicles();
+
+    function routeProvince() {
+        const label = startLabel?.textContent.trim();
+        if (!label || label.includes(",")) return "İstanbul";
+        return label.split("/").at(-1)?.trim() || "İstanbul";
+    }
+
+    const fuelPricePhrases = {
+        loading: { en: "Loading official EPDK price...", tr: "Resmî EPDK fiyatı yükleniyor...", ru: "Загрузка официальной цены EPDK...", zh: "正在加载 EPDK 官方价格..." },
+        stale: { en: "last known official price", tr: "son bilinen resmî fiyat", ru: "последняя доступная официальная цена", zh: "最近的官方价格" },
+        unavailable: { en: "EPDK is temporarily unavailable. You can enter the litre price manually.", tr: "EPDK'ye geçici olarak ulaşılamıyor. Litre fiyatını elle girebilirsiniz.", ru: "EPDK временно недоступна. Введите цену за литр вручную.", zh: "EPDK 暂时不可用，您可以手动输入每升价格。" },
+        manual: { en: "Manual litre price", tr: "Manuel litre fiyatı", ru: "Цена за литр введена вручную", zh: "手动输入每升价格" }
+        ,wait: { en: "Please wait", tr: "Lütfen bekleyin", ru: "Пожалуйста, подождите", zh: "请稍候" }
+    };
+    const fuelPhrase = key => fuelPricePhrases[key][localStorage.getItem("fuelwise-language") || "en"];
+
+    async function loadOfficialFuelPrice() {
+        const requestVersion = ++fuelPriceRequestVersion;
+        fuelPriceStatus.textContent = fuelPhrase("loading");
+        epdkLoader.querySelector("strong").textContent = fuelPhrase("loading");
+        epdkLoader.querySelector("small").textContent = fuelPhrase("wait");
+        epdkLoader.setAttribute("aria-hidden", "false");
+        document.body.classList.add("epdk-loading");
+        try {
+            const query = new URLSearchParams({ province: routeProvince(), fuel_type: fuelTypeInput.value });
+            let response = await fetch(`/api/v1/fuel-prices?${query}`);
+            if (response.status === 422 && routeProvince() !== "İstanbul") {
+                query.set("province", "İstanbul");
+                response = await fetch(`/api/v1/fuel-prices?${query}`);
+            }
+            const body = await response.json();
+            if (!response.ok || !body.prices?.length) throw new Error(body.detail || "Price unavailable");
+            const price = body.prices[0];
+            fuelPriceInput.value = Number(price.average_price).toFixed(2);
+            fuelPriceInput.dataset.minimumPrice = price.minimum_price;
+            fuelPriceInput.dataset.maximumPrice = price.maximum_price;
+            const officialPrice = Number(price.minimum_price) === Number(price.maximum_price)
+                ? `₺${Number(price.average_price).toFixed(2)}/L`
+                : `₺${Number(price.minimum_price).toFixed(2)}–₺${Number(price.maximum_price).toFixed(2)}/L`;
+            fuelPriceStatus.textContent = `${price.province_name} · EPDK ${price.observed_at} · ${officialPrice}${price.stale ? ` · ${fuelPhrase("stale")}` : ""}`;
+        } catch (error) {
+            delete fuelPriceInput.dataset.minimumPrice;
+            delete fuelPriceInput.dataset.maximumPrice;
+            fuelPriceStatus.textContent = fuelPhrase("unavailable");
+        } finally {
+            if (requestVersion === fuelPriceRequestVersion) {
+                document.body.classList.remove("epdk-loading");
+                epdkLoader.setAttribute("aria-hidden", "true");
+            }
+        }
+    }
+
+    fuelTypeInput.addEventListener("change", loadOfficialFuelPrice);
+    fuelPriceInput.addEventListener("input", () => {
+        fuelPriceInput.dataset.minimumPrice = fuelPriceInput.value;
+        fuelPriceInput.dataset.maximumPrice = fuelPriceInput.value;
+        fuelPriceStatus.textContent = fuelPhrase("manual");
+    });
+    if (startLabel) new MutationObserver(loadOfficialFuelPrice).observe(startLabel, { childList: true, characterData: true, subtree: true });
+    loadOfficialFuelPrice();
+
+    function isValidTripInput({ distance, consumption, tankCapacity, fuelPrice, tripType }) {
+        return [distance, consumption, tankCapacity, fuelPrice].every(value => Number.isFinite(value) && value > 0)
+            && ["one-way", "round-trip"].includes(tripType);
+    }
+
+    fuelForm.addEventListener("submit", async (event) => {
 
         event.preventDefault();
 
@@ -96,7 +209,10 @@ document.addEventListener("DOMContentLoaded", () => {
             tripType:
                 document.querySelector(
                     'input[name="trip-type"]:checked'
-                )?.value
+                )?.value,
+
+            trafficCondition:
+                trafficConditionInput.value
 
         };
 
@@ -118,11 +234,60 @@ document.addEventListener("DOMContentLoaded", () => {
         successMessage.textContent =
             "✅ Trip calculated successfully.";
 
-        const result =
-            calculateTrip(tripInput);
-        updateResults(result);
+        try {
+            const result = await requestTripCalculation(tripInput);
+            updateResults(result);
+            successMessage.textContent = result.saved
+                ? "✅ Trip calculated and saved to your history."
+                : "✅ Trip calculated successfully.";
+        } catch (error) {
+            successMessage.textContent = "";
+            errorMessage.textContent = error.message;
+            resetResults();
+        }
 
     });
+
+    async function requestTripCalculation(tripInput) {
+        const selectedVehicle = vehicleSelect.selectedOptions[0];
+        const response = await fetch("/api/v1/trips/calculate", {
+            method: "POST",
+            credentials: "include",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                distance: tripInput.distance,
+                consumption: tripInput.consumption,
+                tank_capacity: tripInput.tankCapacity,
+                fuel_price: tripInput.fuelPrice,
+                minimum_fuel_price: Number(fuelPriceInput.dataset.minimumPrice) || tripInput.fuelPrice,
+                maximum_fuel_price: Number(fuelPriceInput.dataset.maximumPrice) || tripInput.fuelPrice,
+                trip_type: tripInput.tripType,
+                traffic_condition: tripInput.trafficCondition,
+                vehicle_name: vehicleSelect.value ? selectedVehicle?.textContent.trim() : "Manual entry",
+                origin: document.getElementById("route-start-label")?.textContent.trim() || null,
+                destination: document.getElementById("route-end-label")?.textContent.trim() || null
+            })
+        });
+        const body = await response.json();
+        if (!response.ok) {
+            const detail = Array.isArray(body.detail) ? body.detail.map(item => item.msg).join(" ") : body.detail;
+            throw new Error(detail || "Trip could not be calculated.");
+        }
+        return {
+            totalDistance: body.total_distance,
+            fuelRequired: body.fuel_required,
+            totalCost: body.total_cost,
+            estimatedRange: body.estimated_range,
+            fuelStops: body.fuel_stops,
+            minFuelRequired: body.min_fuel_required,
+            maxFuelRequired: body.max_fuel_required,
+            minTotalCost: body.min_total_cost,
+            maxTotalCost: body.max_total_cost,
+            minFuelStops: body.min_fuel_stops,
+            maxFuelStops: body.max_fuel_stops,
+            saved: body.saved
+        };
+    }
 
     function animateValue(
         element,
@@ -169,28 +334,10 @@ document.addEventListener("DOMContentLoaded", () => {
             value => `${value.toFixed(1)} km`
         );
 
-        animateValue(
-            fuelResult,
-            0,
-            result.fuelRequired,
-            700,
-            value => `${value.toFixed(2)} L`
-        );
+        fuelResult.textContent = `${result.minFuelRequired.toFixed(2)} – ${result.maxFuelRequired.toFixed(2)} L`;
 
-        animateValue(
-            costResult,
-            0,
-            result.totalCost,
-            900,
-            value =>
-                value.toLocaleString(
-                    "tr-TR",
-                    {
-                        style: "currency",
-                        currency: "TRY"
-                    }
-                )
-        );
+        const formatCurrency = value => value.toLocaleString("tr-TR", { style: "currency", currency: "TRY" });
+        costResult.textContent = `${formatCurrency(result.minTotalCost)} – ${formatCurrency(result.maxTotalCost)}`;
 
         animateValue(
             rangeResult,
@@ -200,29 +347,9 @@ document.addEventListener("DOMContentLoaded", () => {
             value => `${value.toFixed(0)} km`
         );
 
-        animateValue(
-            stopResult,
-            0,
-            result.fuelStops,
-            500,
-            value => {
-
-                const stops =
-                    Math.round(value);
-
-                if (stops === 0) {
-
-                    return "No stop needed";
-
-                }
-
-                return `${stops} ${stops === 1
-                    ? "stop"
-                    : "stops"
-                    }`;
-
-            }
-        );
+        stopResult.textContent = result.minFuelStops === result.maxFuelStops
+            ? String(result.minFuelStops)
+            : `${result.minFuelStops} – ${result.maxFuelStops}`;
 
     }
 

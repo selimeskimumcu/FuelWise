@@ -388,3 +388,71 @@
     font-weight:600;
 
 }
+.epdk-loader {
+    position: fixed;
+    z-index: 9999;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+    visibility: hidden;
+    opacity: 0;
+    background: rgba(2, 6, 23, .38);
+    backdrop-filter: blur(9px) saturate(.75);
+    -webkit-backdrop-filter: blur(9px) saturate(.75);
+    transition: opacity .22s ease, visibility .22s ease;
+}
+
+body.epdk-loading { overflow: hidden; }
+body.epdk-loading .epdk-loader { visibility: visible; opacity: 1; }
+
+.epdk-loader-card {
+    display: grid;
+    min-width: min(310px, calc(100vw - 48px));
+    padding: 28px 30px 25px;
+    place-items: center;
+    border: 1px solid rgba(56, 189, 248, .3);
+    border-radius: 24px;
+    color: #f8fafc;
+    background: linear-gradient(145deg, rgba(15, 23, 42, .98), rgba(7, 13, 27, .96));
+    box-shadow: 0 28px 90px rgba(2, 6, 23, .62), 0 0 45px rgba(14, 165, 233, .12);
+    text-align: center;
+    transform: translateY(10px) scale(.97);
+    transition: transform .25s ease;
+}
+
+body.epdk-loading .epdk-loader-card { transform: translateY(0) scale(1); }
+.epdk-loader-card strong { margin-top: 18px; font-size: 15px; }
+.epdk-loader-card small { margin-top: 7px; color: #64748b; }
+
+.epdk-loader-ring {
+    position: relative;
+    display: grid;
+    width: 68px;
+    height: 68px;
+    place-items: center;
+    border-radius: 50%;
+    color: #7dd3fc;
+    background: rgba(14, 165, 233, .1);
+}
+
+.epdk-loader-ring::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border: 3px solid rgba(125, 211, 252, .16);
+    border-top-color: #38bdf8;
+    border-right-color: #2563eb;
+    border-radius: inherit;
+    animation: epdkLoaderSpin .8s linear infinite;
+}
+
+.epdk-loader-ring svg { width: 26px; height: 26px; animation: epdkLoaderPulse 1.2s ease-in-out infinite; }
+
+@keyframes epdkLoaderSpin { to { transform: rotate(360deg); } }
+@keyframes epdkLoaderPulse { 50% { opacity: .55; transform: scale(.88); } }
+
+@media (prefers-reduced-motion: reduce) {
+    .epdk-loader-ring::before,
+    .epdk-loader-ring svg { animation-duration: 2s; }
+}

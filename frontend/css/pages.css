@@ -1191,7 +1191,8 @@
    Vehicle Modal Inputs
 ========================== */
 
-.vehicle-modal input {
+.vehicle-modal input,
+.vehicle-modal select {
 
     width: 100%;
 
@@ -1620,9 +1621,259 @@
         box-shadow 0.3s ease;
 }
 
-.social-link svg {
+.social-link svg,
+.social-link i {
     width: 19px;
     height: 19px;
+}
+
+.vehicle-modal {
+    max-height: min(88vh, 820px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: #38bdf8 rgba(15, 23, 42, .55);
+}
+
+.vehicle-modal select {
+    color: #f8fafc;
+    appearance: none;
+    -webkit-appearance: none;
+    padding-right: 48px;
+    background-color: rgba(15, 23, 42, .88);
+    background-image:
+        linear-gradient(45deg, transparent 50%, #38bdf8 50%),
+        linear-gradient(135deg, #38bdf8 50%, transparent 50%);
+    background-position:
+        calc(100% - 21px) 50%,
+        calc(100% - 15px) 50%;
+    background-size: 6px 6px, 6px 6px;
+    background-repeat: no-repeat;
+    outline: none;
+    cursor: pointer;
+}
+
+.vehicle-modal select:focus {
+    border-color: #38bdf8;
+    box-shadow: 0 0 0 4px rgba(56, 189, 248, .1), 0 0 20px rgba(56, 189, 248, .18);
+}
+
+.vehicle-modal select option {
+    color: #f8fafc;
+    background: #0f172a;
+}
+
+.vehicle-modal::-webkit-scrollbar { width: 11px; }
+.vehicle-modal::-webkit-scrollbar-track {
+    margin: 18px 0;
+    border-radius: 999px;
+    background: rgba(15, 23, 42, .58);
+    box-shadow: inset 0 0 0 1px rgba(148, 163, 184, .08);
+}
+.vehicle-modal::-webkit-scrollbar-thumb {
+    min-height: 70px;
+    border: 3px solid rgba(15, 23, 42, .78);
+    border-radius: 999px;
+    background: linear-gradient(180deg, #38bdf8, #2563eb);
+    box-shadow: 0 0 14px rgba(56, 189, 248, .35);
+}
+.vehicle-modal::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #7dd3fc, #3b82f6);
+}
+
+.vehicle-modal .modal-header {
+    position: sticky;
+    top: -36px;
+    z-index: 12;
+    padding: 10px 0 16px;
+    background: linear-gradient(180deg, #1e293b 72%, rgba(30, 41, 59, 0));
+}
+
+.vehicle-default-option {
+    display: flex !important;
+    align-items: center;
+    gap: 10px;
+    margin: 4px 0 18px;
+    cursor: pointer;
+}
+
+.vehicle-default-option input {
+    width: 17px;
+    height: 17px;
+    margin: 0;
+    padding: 0;
+    accent-color: #2563eb;
+}
+
+.vehicle-form-message {
+    min-height: 18px;
+    margin: -4px 0 10px;
+    color: #fca5a5;
+    font-size: 12px;
+    text-align: center;
+}
+
+.vehicle-form-message.success { color: #86efac; }
+
+.vehicle-empty-state {
+    grid-column: 1 / -1;
+    padding: 44px 24px;
+    border: 1px dashed rgba(148, 163, 184, .2);
+    border-radius: 20px;
+    color: #94a3b8;
+    text-align: center;
+}
+
+.vehicle-empty-state h4 { margin: 12px 0 8px; color: #f8fafc; font-size: 20px; }
+.vehicle-empty-state svg { width: 34px; height: 34px; color: #38bdf8; }
+
+.default-badge {
+    display: inline-flex;
+    margin-top: 7px;
+    padding: 4px 8px;
+    border-radius: 999px;
+    color: #86efac;
+    background: rgba(34, 197, 94, .1);
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.delete-confirm-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 10020;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+    visibility: hidden;
+    opacity: 0;
+    background: rgba(2, 6, 23, .74);
+    backdrop-filter: blur(10px);
+    transition: opacity .28s ease, visibility .28s ease;
+}
+
+.delete-confirm-overlay.active { visibility: visible; opacity: 1; }
+
+.delete-confirm-box {
+    width: min(100%, 430px);
+    padding: 38px;
+    border: 1px solid rgba(248, 113, 113, .18);
+    border-radius: 24px;
+    background: linear-gradient(145deg, rgba(30, 41, 59, .99), rgba(15, 23, 42, .99));
+    box-shadow: 0 32px 90px rgba(0, 0, 0, .5), 0 0 45px rgba(239, 68, 68, .08);
+    text-align: center;
+    transform: translateY(24px) scale(.96);
+    transition: transform .35s cubic-bezier(.2, .8, .2, 1);
+}
+
+.delete-confirm-overlay.active .delete-confirm-box { transform: translateY(0) scale(1); }
+
+.delete-confirm-icon {
+    width: 62px;
+    height: 62px;
+    display: grid;
+    place-items: center;
+    margin: 0 auto 20px;
+    border-radius: 19px;
+    color: #fca5a5;
+    background: rgba(239, 68, 68, .11);
+    box-shadow: 0 0 28px rgba(239, 68, 68, .1);
+}
+
+.delete-confirm-icon svg { width: 27px; height: 27px; }
+.delete-confirm-box h3 { margin-bottom: 12px; font-size: 24px; }
+.delete-confirm-box p { color: #94a3b8; font-size: 14px; line-height: 1.7; }
+.delete-confirm-box p strong { color: #f8fafc; }
+.delete-confirm-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 28px; }
+.delete-confirm-actions .secondary-btn { padding: 13px 20px; }
+
+.delete-confirm-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    padding: 13px 20px;
+    border-radius: 14px;
+    color: white;
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    font-weight: 700;
+    transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.delete-confirm-button:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(239, 68, 68, .28); }
+.delete-confirm-button svg { width: 17px; height: 17px; }
+
+@media (max-width: 480px) {
+    .delete-confirm-box { padding: 32px 22px; }
+    .delete-confirm-actions { grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .delete-confirm-overlay,
+    .delete-confirm-box { transition: none; }
+}
+
+.vehicle-background-video {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    pointer-events: none;
+}
+
+.vehicle-video-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background:
+        linear-gradient(180deg, rgba(15, 23, 42, .76), rgba(15, 23, 42, .88)),
+        linear-gradient(90deg, rgba(15, 23, 42, .42), rgba(37, 99, 235, .12));
+    pointer-events: none;
+}
+
+.vehicle-section > .container {
+    position: relative;
+    z-index: 3;
+}
+
+.vehicles-video-section {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+}
+
+.vehicles-video-section .vehicle-background-video {
+    z-index: -3;
+}
+
+.vehicles-video-section .vehicle-video-overlay {
+    z-index: -2;
+    background:
+        linear-gradient(180deg, rgba(7, 13, 26, .72), rgba(7, 13, 26, .9)),
+        linear-gradient(90deg, rgba(15, 23, 42, .38), rgba(37, 99, 235, .14));
+}
+
+.vehicles-content-layer {
+    position: relative;
+    z-index: 2;
+}
+
+.vehicles-video-section .vehicle-layout,
+.vehicles-video-section .empty-action {
+    border-color: rgba(125, 211, 252, .2);
+    background: rgba(8, 15, 29, .74);
+    box-shadow: 0 24px 70px rgba(2, 6, 23, .34);
+    backdrop-filter: blur(8px);
+}
+
+.social-link i {
+    display: grid;
+    place-items: center;
+    font-size: 19px;
 }
 
 .social-link:hover {
