@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: fuelwise-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: fuelwise
+      POSTGRES_USER: fuelwise
+      POSTGRES_PASSWORD: fuelwise_dev_password
+    ports:
+      - "5433:5432"
+    volumes:
+      - fuelwise_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fuelwise -d fuelwise"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  fuelwise_postgres_data:

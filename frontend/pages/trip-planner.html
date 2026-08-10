@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description"
+        content="Calculate fuel consumption, trip cost, vehicle range and required fuel stops with FuelWise.">
+
+    <title>Trip Planner | FuelWise</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
+
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/pages.css">
+
+    <link rel="stylesheet" href="../css/navbar.css">
+    <link rel="stylesheet" href="../css/footer.css">
+    <link rel="stylesheet" href="../css/trip-planner.css?v=20260806-4">
+    <link rel="stylesheet" href="../css/login-modal.css?v=20260807-1">
+    <link rel="stylesheet" href="../css/i18n.css">
+    <link rel="stylesheet" href="../css/epdk-loader.css?v=20260807-1">
+</head>
+
+<body>
+
+    <header class="navbar">
+
+        <div class="container navbar-container">
+
+            <a href="../index.html" class="logo" aria-label="FuelWise Home">
+                Fuel<span>Wise</span>
+            </a>
+
+            <nav aria-label="Main Navigation">
+
+                <ul class="nav-links">
+
+                    <li>
+                        <a href="../index.html">
+                            Home
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="trip-planner.html" class="active">
+                            Trip Planner
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="vehicles.html">
+                            Vehicles
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="fuel-prices.html">
+                            Fuel Prices
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="about.html">
+                            About
+                        </a>
+                    </li>
+
+                </ul>
+
+            </nav>
+
+            <div class="nav-buttons">
+
+                <button type="button" class="login-btn">
+                    Login
+                </button>
+
+                <a href="register.html" class="primary-btn">
+                    Register
+                </a>
+
+            </div>
+
+        </div>
+
+    </header>
+
+    <main>
+
+        <section class="page-hero">
+
+            <div class="container page-hero-container">
+
+                <p class="section-badge">
+
+                    <i data-lucide="route" aria-hidden="true"></i>
+
+                    FuelWise Trip Planner
+
+                </p>
+
+                <h1>
+                    Calculate every journey
+                    <span>before you start.</span>
+                </h1>
+
+                <p>
+                    Enter your vehicle and trip details to estimate
+                    fuel usage, total cost, full-tank range and
+                    required fuel stops.
+                </p>
+
+            </div>
+
+        </section>
+
+        <section class="planner-section planner-page-section" id="trip-planner">
+
+            <div class="container">
+
+                <section class="route-map-card" aria-labelledby="route-map-title">
+                    <div class="route-map-header">
+                        <div>
+                            <p class="form-eyebrow">Route selection</p>
+                            <h2 id="route-map-title">Choose your route on the map</h2>
+                            <p class="route-map-description">Select your starting point first, then select your destination.</p>
+                        </div>
+
+                        <button type="button" class="route-reset-btn" id="route-reset" disabled>
+                            <i data-lucide="rotate-ccw" aria-hidden="true"></i>
+                            Reset route
+                        </button>
+                    </div>
+
+                    <div class="route-search-grid">
+                        <div class="route-search-field">
+                            <label for="route-start-search">Search starting address</label>
+                            <div class="route-search-input">
+                                <i data-lucide="search" aria-hidden="true"></i>
+                                <input id="route-start-search" type="search" autocomplete="off" placeholder="Neighbourhood, district or city" aria-autocomplete="list" aria-controls="route-start-suggestions">
+                                <span class="route-search-spinner" aria-hidden="true"></span>
+                            </div>
+                            <div class="route-suggestions" id="route-start-suggestions" role="listbox"></div>
+                        </div>
+                        <div class="route-search-field">
+                            <label for="route-end-search">Search destination address</label>
+                            <div class="route-search-input">
+                                <i data-lucide="search" aria-hidden="true"></i>
+                                <input id="route-end-search" type="search" autocomplete="off" placeholder="Neighbourhood, district or city" aria-autocomplete="list" aria-controls="route-end-suggestions" disabled>
+                                <span class="route-search-spinner" aria-hidden="true"></span>
+                            </div>
+                            <div class="route-suggestions" id="route-end-suggestions" role="listbox"></div>
+                        </div>
+                    </div>
+
+                    <div class="route-summary" aria-live="polite">
+                        <div class="route-point route-point-start">
+                            <span class="route-point-icon"><i data-lucide="circle-dot" aria-hidden="true"></i></span>
+                            <div><small>Starting point</small><strong id="route-start-label">Click the map to choose</strong></div>
+                        </div>
+                        <div class="route-summary-line" aria-hidden="true"></div>
+                        <div class="route-point route-point-end">
+                            <span class="route-point-icon"><i data-lucide="map-pin" aria-hidden="true"></i></span>
+                            <div><small>Destination</small><strong id="route-end-label">Waiting for starting point</strong></div>
+                        </div>
+                        <div class="route-distance-badge">
+                            <small>Route distance</small>
+                            <strong id="route-distance-label">— km</strong>
+                        </div>
+                    </div>
+
+                    <div class="route-map-shell">
+                        <div id="trip-map" role="application" aria-label="Trip route map"></div>
+                        <div class="route-map-status" id="route-map-status">
+                            <i data-lucide="mouse-pointer-click" aria-hidden="true"></i>
+                            <span>Choose your starting point</span>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="planner-layout">
+
+                    <form class="planner-form" id="fuel-form">
+
+                        <div class="form-header">
+
+                            <div>
+
+                                <p class="form-eyebrow">
+                                    Journey details
+                                </p>
+
+                                <h2>Plan your trip</h2>
+
+                            </div>
+
+                            <div class="form-header-icon">
+
+                                <i data-lucide="navigation" aria-hidden="true"></i>
+
+                            </div>
+
+                        </div>
+
+                        <div class="form-grid">
+
+                            <div class="form-group form-group-full">
+
+                                <label for="vehicle">
+                                    Vehicle
+                                </label>
+
+                                <div class="field-wrapper">
+
+                                    <i data-lucide="car-front" aria-hidden="true"></i>
+
+                                    <select id="vehicle" name="vehicle">
+
+                                        <option value="">
+                                            Manual entry
+                                        </option>
+
+                                        <option value="forza">
+                                            Honda Forza 250
+                                        </option>
+
+                                        <option value="cl250">
+                                            Honda CL250
+                                        </option>
+
+                                        <option value="pcx">
+                                            Honda PCX 125
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <label for="distance">
+                                    Distance
+                                </label>
+
+                                <div class="field-wrapper">
+
+                                    <i data-lucide="route" aria-hidden="true"></i>
+
+                                    <input type="number" id="distance" name="distance" placeholder="Select a route above"
+                                        min="0" step="0.1" readonly required>
+
+                                    <span class="field-unit">
+                                        km
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <label for="consumption">
+                                    Average consumption
+                                </label>
+
+                                <div class="field-wrapper">
+
+                                    <i data-lucide="gauge" aria-hidden="true"></i>
+
+                                    <input type="number" id="consumption" name="consumption" placeholder="5.5" min="0"
+                                        step="0.1" required>
+
+                                    <span class="field-unit">
+                                        L/100 km
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <label for="tank-capacity">
+                                    Tank capacity
+                                </label>
+
+                                <div class="field-wrapper">
+
+                                    <i data-lucide="fuel" aria-hidden="true"></i>
+
+                                    <input type="number" id="tank-capacity" name="tank-capacity" placeholder="11.7"
+                                        min="0" step="0.1" required>
+
+                                    <span class="field-unit">
+                                        L
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <label for="fuel-type">
+                                    Fuel type
+                                </label>
+
+                                <div class="field-wrapper">
+                                    <i data-lucide="droplets" aria-hidden="true"></i>
+                                    <select id="fuel-type" name="fuel-type">
+                                        <option value="gasoline">Gasoline</option>
+                                        <option value="diesel">Diesel</option>
+                                        <option value="lpg">LPG / Autogas</option>
+                                    </select>
+                                </div>
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <label for="fuel-price">
+                                    Fuel price
+                                </label>
+
+                                <div class="field-wrapper">
+
+                                    <i data-lucide="badge-turkish-lira" aria-hidden="true"></i>
+
+                                    <input type="number" id="fuel-price" name="fuel-price" placeholder="52.00" min="0"
+                                        step="0.01" required>
+
+                                    <span class="field-unit">
+                                        ₺/L
+                                    </span>
+
+                                </div>
+
+                                <p class="traffic-condition-hint" id="fuel-price-status">Official EPDK price will load automatically.</p>
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <label for="traffic-condition">
+                                    Traffic condition
+                                </label>
+
+                                <div class="field-wrapper">
+                                    <i data-lucide="traffic-cone" aria-hidden="true"></i>
+                                    <select id="traffic-condition" name="traffic-condition">
+                                        <option value="flowing">Flowing</option>
+                                        <option value="normal" selected>Normal</option>
+                                        <option value="heavy">Heavy</option>
+                                        <option value="very-heavy">Very Heavy</option>
+                                    </select>
+                                </div>
+                                <p class="traffic-condition-hint">Applied only to the estimated urban parts of your route.</p>
+
+                            </div>
+
+                            <div class="form-group form-group-full">
+
+                                <label>
+                                    Trip type
+                                </label>
+
+                                <div class="trip-type-options">
+
+                                    <label class="trip-type-option">
+
+                                        <input type="radio" name="trip-type" value="one-way" checked>
+
+                                        <span>
+
+                                            <i data-lucide="move-right" aria-hidden="true"></i>
+
+                                            One Way
+
+                                        </span>
+
+                                    </label>
+
+                                    <label class="trip-type-option">
+
+                                        <input type="radio" name="trip-type" value="round-trip">
+
+                                        <span>
+
+                                            <i data-lucide="repeat-2" aria-hidden="true"></i>
+
+                                            Round Trip
+
+                                        </span>
+
+                                    </label>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <p class="form-error" id="error-message"></p>
+
+                        <p class="form-success" id="success-message"></p>
+
+                        <button type="submit" class="primary-btn calculate-btn">
+
+                            <i data-lucide="calculator" aria-hidden="true"></i>
+
+                            Calculate Trip
+
+                        </button>
+
+                    </form>
+
+                    <aside class="results-panel">
+
+                        <div class="results-header">
+
+                            <div>
+
+                                <p class="form-eyebrow">
+                                    Calculation
+                                </p>
+
+                                <h2>Trip Results</h2>
+
+                            </div>
+
+                            <div class="results-status">
+                                Live Preview
+                            </div>
+
+                        </div>
+
+                        <div class="results-grid">
+
+                            <article class="result-card">
+
+                                <div class="result-icon">
+                                    <i data-lucide="route"></i>
+                                </div>
+
+                                <div>
+
+                                    <p>Total Distance</p>
+
+                                    <strong id="distance-result">
+                                        0 km
+                                    </strong>
+
+                                </div>
+
+                            </article>
+
+                            <article class="result-card">
+
+                                <div class="result-icon">
+                                    <i data-lucide="fuel"></i>
+                                </div>
+
+                                <div>
+
+                                    <p>Estimated Fuel</p>
+
+                                    <strong id="fuel-result">
+                                        0.00 L
+                                    </strong>
+
+                                </div>
+
+                            </article>
+
+                            <article class="result-card result-card-highlight">
+
+                                <div class="result-icon">
+                                    <i data-lucide="wallet-cards"></i>
+                                </div>
+
+                                <div>
+
+                                    <p>Estimated Cost</p>
+
+                                    <strong id="cost-result">
+                                        ₺0.00
+                                    </strong>
+
+                                </div>
+
+                            </article>
+
+                            <article class="result-card">
+
+                                <div class="result-icon">
+                                    <i data-lucide="gauge"></i>
+                                </div>
+
+                                <div>
+
+                                    <p>Estimated Range</p>
+
+                                    <strong id="range-result">
+                                        0 km
+                                    </strong>
+
+                                </div>
+
+                            </article>
+
+                            <article class="result-card">
+
+                                <div class="result-icon">
+                                    <i data-lucide="coffee"></i>
+                                </div>
+
+                                <div>
+
+                                    <p>Fuel Stops</p>
+
+                                    <strong id="stop-result">
+                                        0
+                                    </strong>
+
+                                </div>
+
+                            </article>
+
+                        </div>
+
+                        <div class="result-note">
+
+                            <i data-lucide="info" aria-hidden="true"></i>
+
+                            <p>
+                                Estimates assume a full tank at departure. The range includes modeled city traffic,
+                                road, weather, climate and vehicle-load effects.
+                            </p>
+
+                        </div>
+
+                    </aside>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer class="site-footer">
+
+        <div class="container footer-container">
+
+            <div class="footer-brand">
+
+                <a href="../index.html" class="logo footer-logo">
+                    Fuel<span>Wise</span>
+                </a>
+
+                <p class="footer-description">
+                    Plan smarter journeys, calculate fuel costs
+                    and manage every vehicle from one place.
+                </p>
+
+                <div class="footer-socials">
+
+                    <a href="https://github.com/selimeskimumcu" target="_blank" rel="noopener noreferrer"
+                        class="social-link" aria-label="GitHub">
+                        <i class="fa-brands fa-github"></i>
+                    </a>
+
+                    <a href="https://linkedin.com/in/selimeskimumcu" target="_blank" rel="noopener noreferrer"
+                        class="social-link" aria-label="LinkedIn">
+                        <i class="fa-brands fa-linkedin-in"></i>
+                    </a>
+
+                    <a href="https://instagram.com/selimeskimumcu" target="_blank" rel="noopener noreferrer"
+                        class="social-link" aria-label="Instagram">
+                        <i class="fa-brands fa-instagram"></i>
+                    </a>
+
+                    <a href="#" class="social-link" aria-label="YouTube">
+                        <i class="fa-brands fa-youtube"></i>
+                    </a>
+
+                </div>
+
+            </div>
+
+            <div class="footer-links-column">
+
+                <h3>Quick Links</h3>
+
+                <ul class="footer-links">
+
+                    <li>
+                        <a href="../index.html">Home</a>
+                    </li>
+
+                    <li>
+                        <a href="trip-planner.html">
+                            Trip Planner
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="vehicles.html">Vehicles</a>
+                    </li>
+
+                    <li>
+                        <a href="fuel-prices.html">
+                            Fuel Prices
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="about.html">About</a>
+                    </li>
+
+                </ul>
+
+            </div>
+
+            <div class="footer-links-column">
+
+                <h3>Contact</h3>
+
+                <ul class="footer-contact-list">
+
+                    <li>
+                        <i data-lucide="mail"></i>
+
+                        <a href="mailto:fuelwise.support@gmail.com">
+                            fuelwise.support@gmail.com
+                        </a>
+                    </li>
+
+                    <li>
+                        <i data-lucide="map-pin"></i>
+
+                        <span>
+                            Istanbul, Türkiye
+                        </span>
+                    </li>
+
+                </ul>
+
+            </div>
+
+            <div class="footer-stats">
+
+                <h3>Trusted by drivers</h3>
+
+                <div class="footer-stats-grid">
+
+                    <div class="footer-stat">
+                        <strong>2.5K+</strong>
+                        <span>Drivers</span>
+                    </div>
+
+                    <div class="footer-stat">
+                        <strong>6K+</strong>
+                        <span>Trips Planned</span>
+                    </div>
+
+                    <div class="footer-stat">
+                        <strong>98%</strong>
+                        <span>Satisfaction</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="container footer-bottom">
+
+            <p>
+                © 2026 FuelWise. All rights reserved.
+            </p>
+
+            <p>
+                Designed &amp; Developed by Selim Eskimumcu
+
+                <span class="version-badge">
+                    v1.0.0 Beta
+                </span>
+            </p>
+
+            <div class="footer-legal">
+
+                <a href="#">
+                    Privacy Policy
+                </a>
+
+                <a href="#">
+                    Terms of Service
+                </a>
+
+            </div>
+
+        </div>
+
+    </footer>
+
+    <div class="epdk-loader" id="epdk-loader" role="status" aria-live="polite" aria-hidden="true">
+        <div class="epdk-loader-card">
+            <span class="epdk-loader-ring"><i data-lucide="fuel"></i></span>
+            <strong>Loading official EPDK prices...</strong>
+            <small>Please wait</small>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="../js/login-modal.js?v=20260807-1"></script>
+    <script src="../js/auth-client.js?v=20260806-4"></script>
+    <script src="../js/trip-map.js?v=20260807-1"></script>
+    <script type="module" src="../js/app.js?v=20260807-6"></script>
+    <script src="../js/i18n.js?v=20260807-5"></script>
+
+</body>
+
+</html>

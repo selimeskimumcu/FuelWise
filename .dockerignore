@@ -1,0 +1,14 @@
+.git
+.gitignore
+.vscode
+.idea
+**/__pycache__
+**/*.pyc
+backend/.env
+backend/.env.*
+!backend/.env.example
+!backend/.env.production.example
+backend/.venv
+backend/.pytest_cache
+backend/backups
+backend/server.*.log

@@ -1,0 +1,19 @@
+.fuel-price-search {
+    max-width: 680px;
+    margin: 0 auto 2rem;
+    padding: 1.25rem;
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    border-radius: 20px;
+    background: rgba(15, 23, 42, 0.62);
+    backdrop-filter: blur(18px);
+}
+
+.fuel-price-search label { display: block; margin-bottom: .65rem; font-weight: 700; }
+.fuel-price-search .field-wrapper { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: .75rem; }
+.fuel-price-search input { min-width: 0; border: 0; outline: 0; color: inherit; background: transparent; }
+.fuel-price-search .muted-copy { margin: .75rem 0 0; }
+
+@media (max-width: 560px) {
+    .fuel-price-search .field-wrapper { grid-template-columns: auto 1fr; }
+    .fuel-price-search .primary-btn { grid-column: 1 / -1; justify-content: center; }
+}
