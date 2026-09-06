@@ -2,7 +2,7 @@ import uuid
 from datetime import datetime
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 
 VehicleType = Literal["car", "motorcycle", "truck", "bus", "semi_truck"]
@@ -51,6 +51,19 @@ class VehicleUpdate(BaseModel):
             return None
         cleaned = value.strip()
         return cleaned or None
+
+    # Columns that are NOT NULL in the database: an explicit null would blow up
+    # on commit with an IntegrityError (HTTP 500). Reject it as a clean 422.
+    # Omitted fields still mean "leave unchanged"; null is only legal for the
+    # nullable columns (make, model, year), where it clears the value.
+    _required_fields = ("name", "vehicle_type", "fuel_type", "consumption", "tank_capacity")
+
+    @model_validator(mode="after")
+    def reject_null_for_required_fields(self) -> "VehicleUpdate":
+        for field_name in self._required_fields:
+            if field_name in self.model_fields_set and getattr(self, field_name) is None:
+                raise ValueError(f"'{field_name}' cannot be null")
+        return self
 
 
 class VehicleResponse(VehicleBase):
