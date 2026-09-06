@@ -44,7 +44,13 @@ def client_address(request: Request) -> str:
     if settings.rate_limit_trust_proxy_headers:
         forwarded = request.headers.get("x-forwarded-for")
         if forwarded:
-            return forwarded.split(",", 1)[0].strip()
+            # Read the last hop, not the first. Every proxy appends the peer it
+            # saw, so only the final entry is written by our own proxy; earlier
+            # entries arrive from the client and are forgeable. Trusting the
+            # first one let a rotating X-Forwarded-For defeat every per-IP limit.
+            client_ip = forwarded.rsplit(",", 1)[-1].strip()
+            if client_ip:
+                return client_ip
     return request.client.host if request.client else "unknown"
 
 
