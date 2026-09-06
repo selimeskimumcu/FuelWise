@@ -94,3 +94,51 @@ def test_supported_commercial_vehicle_types(client: TestClient) -> None:
 
     unsupported = {**vehicle_payload("Scooter"), "vehicle_type": "scooter"}
     assert client.post("/api/v1/vehicles", json=unsupported).status_code == 422
+
+
+def test_update_rejects_null_for_required_fields(client: TestClient) -> None:
+    create_account_and_login(client)
+    vehicle_id = client.post("/api/v1/vehicles", json=vehicle_payload()).json()["id"]
+
+    for field in ("name", "vehicle_type", "fuel_type", "consumption", "tank_capacity"):
+        response = client.patch(f"/api/v1/vehicles/{vehicle_id}", json={field: None})
+        assert response.status_code == 422, f"PATCH {field}=null should be 422, got {response.status_code}"
+
+    after = client.get(f"/api/v1/vehicles/{vehicle_id}")
+    assert after.status_code == 200
+    assert after.json()["name"] == "Honda Forza 250"
+    assert after.json()["consumption"] == 3.4
+
+
+def test_update_rejects_blank_name_for_required_field(client: TestClient) -> None:
+    create_account_and_login(client)
+    vehicle_id = client.post("/api/v1/vehicles", json=vehicle_payload()).json()["id"]
+
+    response = client.patch(f"/api/v1/vehicles/{vehicle_id}", json={"name": "   "})
+    assert response.status_code == 422, f"PATCH name='   ' should be 422, got {response.status_code}"
+
+
+def test_update_allows_null_for_nullable_fields(client: TestClient) -> None:
+    create_account_and_login(client)
+    vehicle_id = client.post("/api/v1/vehicles", json=vehicle_payload()).json()["id"]
+
+    response = client.patch(f"/api/v1/vehicles/{vehicle_id}", json={"make": None, "model": None, "year": None})
+    assert response.status_code == 200
+    body = response.json()
+    assert body["make"] is None
+    assert body["model"] is None
+    assert body["year"] is None
+    assert body["name"] == "Honda Forza 250"
+
+
+def test_update_omitted_fields_remain_untouched(client: TestClient) -> None:
+    create_account_and_login(client)
+    vehicle_id = client.post("/api/v1/vehicles", json=vehicle_payload()).json()["id"]
+
+    response = client.patch(f"/api/v1/vehicles/{vehicle_id}", json={"consumption": 4.2})
+    assert response.status_code == 200
+    body = response.json()
+    assert body["consumption"] == 4.2
+    assert body["name"] == "Honda Forza 250"
+    assert body["make"] == "Honda"
+    assert body["tank_capacity"] == 11.7
