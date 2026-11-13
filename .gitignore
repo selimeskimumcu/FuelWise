@@ -14,3 +14,6 @@ backend/backups/*
 !backend/backups/.gitkeep
 .idea/
 .vscode/
+
+# Raw EEA responses cached by build_vehicle_catalog.py
+backend/scripts/.catalog-cache/

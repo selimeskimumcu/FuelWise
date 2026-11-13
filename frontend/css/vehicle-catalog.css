@@ -1,0 +1,230 @@
+/* Vehicle catalogue picker (vehicle modal + trip planner) */
+.catalog-picker {
+    grid-column: 1 / -1;
+    padding: 20px;
+    border: 1px solid rgba(56, 189, 248, .26);
+    border-radius: 18px;
+    background:
+        radial-gradient(420px circle at 100% 0%, rgba(37, 99, 235, .2), transparent 60%),
+        rgba(15, 23, 42, .72);
+}
+
+.vehicle-modal .catalog-picker {
+    margin-bottom: 22px;
+}
+
+.catalog-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 6px 14px;
+    margin-bottom: 14px;
+}
+
+.catalog-head strong {
+    color: #f8fafc;
+    font-size: 16px;
+}
+
+.catalog-head span {
+    color: #7dd3fc;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .04em;
+}
+
+.catalog-types {
+    display: inline-flex;
+    gap: 4px;
+    margin-bottom: 16px;
+    padding: 4px;
+    border: 1px solid rgba(148, 163, 184, .16);
+    border-radius: 12px;
+    background: rgba(2, 6, 23, .4);
+}
+
+.catalog-types button {
+    padding: 8px 16px;
+    border-radius: 9px;
+    background: transparent;
+    color: #94a3b8;
+    font-size: 13px;
+    font-weight: 600;
+    transition: background .25s ease, color .25s ease;
+}
+
+.catalog-types button:hover {
+    color: #e2e8f0;
+}
+
+.catalog-types button.active {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: #fff;
+}
+
+.catalog-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.vehicle-modal .catalog-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.catalog-grid label {
+    display: grid;
+    gap: 7px;
+    margin: 0;
+}
+
+.catalog-grid label[hidden] {
+    display: none;
+}
+
+.catalog-grid label span {
+    color: #cbd5e1;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.catalog-picker select {
+    width: 100%;
+    min-height: 46px;
+    padding: 0 36px 0 14px;
+    border: 1px solid rgba(148, 163, 184, .18);
+    border-radius: 12px;
+    outline: none;
+    background-color: rgba(2, 6, 23, .55);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%237dd3fc' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m4 6 4 4 4-4'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    color: #f8fafc;
+    font: inherit;
+    font-size: 14px;
+    appearance: none;
+    -webkit-appearance: none;
+    transition: border-color .25s ease, box-shadow .25s ease, opacity .25s ease;
+}
+
+.catalog-picker select:focus {
+    border-color: #38bdf8;
+    box-shadow: 0 0 0 4px rgba(56, 189, 248, .1);
+}
+
+.catalog-picker select:disabled {
+    opacity: .45;
+    cursor: not-allowed;
+}
+
+.catalog-picker select option,
+.catalog-picker select optgroup {
+    background: #0f172a;
+    color: #f8fafc;
+}
+
+.catalog-hint {
+    margin-top: 14px;
+    color: #94a3b8;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.catalog-result {
+    margin-top: 16px;
+    animation: catalog-in .45s cubic-bezier(.2, .7, .2, 1);
+}
+
+@keyframes catalog-in {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: none; }
+}
+
+.catalog-figures {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+}
+
+.catalog-figures > div {
+    padding: 13px 15px;
+    border: 1px solid rgba(148, 163, 184, .14);
+    border-radius: 14px;
+    background: rgba(2, 6, 23, .45);
+}
+
+.catalog-figures > div.is-main {
+    border-color: rgba(56, 189, 248, .4);
+    background: linear-gradient(160deg, rgba(37, 99, 235, .26), rgba(2, 6, 23, .45));
+}
+
+.catalog-figures span {
+    display: block;
+    margin-bottom: 6px;
+    color: #94a3b8;
+    font-size: 11.5px;
+    line-height: 1.4;
+}
+
+.catalog-figures strong {
+    color: #f8fafc;
+    font-size: 21px;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -.02em;
+}
+
+.catalog-figures .is-main strong {
+    color: #7dd3fc;
+}
+
+.catalog-figures small {
+    color: #94a3b8;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.catalog-note {
+    margin-top: 12px;
+    color: #94a3b8;
+    font-size: 12.5px;
+    line-height: 1.65;
+}
+
+.planner-catalog[hidden] {
+    display: none;
+}
+
+/* Fields the catalogue just filled in */
+.catalog-filled {
+    animation: catalog-fill 1.1s ease;
+}
+
+@keyframes catalog-fill {
+    0% { box-shadow: 0 0 0 0 rgba(56, 189, 248, .6); border-color: #38bdf8; }
+    100% { box-shadow: 0 0 0 10px rgba(56, 189, 248, 0); }
+}
+
+@media (max-width: 900px) {
+    .catalog-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 520px) {
+    .catalog-grid,
+    .vehicle-modal .catalog-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .catalog-picker {
+        padding: 16px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .catalog-result,
+    .catalog-filled {
+        animation: none;
+    }
+}

@@ -21,6 +21,37 @@ const fields = form ? {
     isDefault: form.querySelector("#vehicle-default"),
 } : null;
 
+// Catalogue picker: choosing make, model and engine fills the form in.
+let catalogPicker = null;
+let autoFilledName = "";
+
+function flashField(input) {
+    input.classList.remove("catalog-filled");
+    void input.offsetWidth;
+    input.classList.add("catalog-filled");
+}
+
+function applyCatalogVehicle(vehicle) {
+    if (!fields.name.value.trim() || fields.name.value === autoFilledName) {
+        fields.name.value = vehicle.name.slice(0, 100);
+        autoFilledName = fields.name.value;
+    }
+    fields.make.value = vehicle.make;
+    fields.model.value = vehicle.model;
+    fields.year.value = vehicle.year || "";
+    fields.vehicleType.value = vehicle.type;
+    fields.fuelType.value = vehicle.fuel;
+    fields.consumption.value = vehicle.consumption;
+    fields.tankCapacity.value = vehicle.tank;
+    [fields.consumption, fields.tankCapacity].forEach(flashField);
+}
+
+if (form && window.FuelWiseCatalog) {
+    const holder = document.createElement("div");
+    form.prepend(holder);
+    catalogPicker = window.FuelWiseCatalog.mount(holder, { onSelect: applyCatalogVehicle });
+}
+
 const modalTitle = document.getElementById("vehicle-modal-title");
 const submitButton = document.getElementById("vehicle-submit");
 const formMessage = document.getElementById("vehicle-form-message");
@@ -153,6 +184,8 @@ async function refreshVehiclesFromApi() {
 
 function resetForm() {
     form?.reset();
+    catalogPicker?.reset();
+    autoFilledName = "";
     editingVehicleId = null;
     if (modalTitle) modalTitle.textContent = "Add Vehicle";
     if (submitButton) submitButton.textContent = "Save Vehicle";

@@ -104,6 +104,11 @@
         ,"“Know what the journey will cost before the road begins.”": ["“Yol başlamadan önce yolculuğun neye mal olacağını bilin.”","«Узнайте стоимость поездки ещё до выезда.»","“出发之前，先知道这趟行程要花多少。”"]
         ,"Designed and developed in Istanbul with clarity, speed and practical driving needs at its core.": ["Netlik, hız ve pratik sürüş ihtiyaçları merkeze alınarak İstanbul'da tasarlandı ve geliştirildi.","Создано в Стамбуле с упором на ясность, скорость и практические нужды водителей.","在伊斯坦布尔设计和开发，以清晰、快速和实用的驾驶需求为核心。"]
         ,"Trips": ["Yolculuk","Поездок","行程"]
+        ,"Choose from catalogue": ["Katalogdan seç", "Выбрать из каталога", "从目录中选择"]
+        ,"Pick your make, model and engine from the catalogue. Consumption and tank size fill in for you.": ["Katalogdan marka, model ve motorunuzu seçin. Tüketim ve depo kapasitesi sizin için doldurulur.", "Выберите марку, модель и двигатель из каталога. Расход и объём бака подставятся сами.", "从目录中选择品牌、车型和发动机，油耗和油箱容量会自动填入。"]
+        ,"Vehicle Catalogue": ["Araç Kataloğu", "Каталог транспорта", "车辆目录"]
+        ,"Pick your make, model and engine. No need to know your consumption.": ["Marka, model ve motorunuzu seçin. Tüketiminizi bilmenize gerek yok.", "Выберите марку, модель и двигатель. Знать расход не нужно.", "选择品牌、车型和发动机，无需知道油耗。"]
+        ,"Vehicle models": ["Araç modeli", "Моделей", "款车型"]
     };
 
     const langIndex = { tr: 0, ru: 1, zh: 2 };

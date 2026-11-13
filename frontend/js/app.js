@@ -60,7 +60,49 @@ document.addEventListener("DOMContentLoaded", () => {
     const successMessage =
         document.getElementById("success-message");
 
+    // Catalogue: lets anyone pick a make, model and engine without knowing the consumption.
+    const CATALOG_OPTION = "__catalog";
+    const catalogHolder = document.getElementById("planner-catalog");
+    let catalogVehicle = null;
+    let catalogPicker = null;
+
+    function flashField(input) {
+        const wrapper = input.closest(".field-wrapper") || input;
+        wrapper.classList.remove("catalog-filled");
+        void wrapper.offsetWidth;
+        wrapper.classList.add("catalog-filled");
+    }
+
+    function applyCatalogVehicle(vehicle) {
+        catalogVehicle = vehicle;
+        consumptionInput.value = vehicle.consumption;
+        tankCapacityInput.value = vehicle.tank;
+        [consumptionInput, tankCapacityInput].forEach(flashField);
+        if (fuelTypeInput.value !== vehicle.fuel) {
+            fuelTypeInput.value = vehicle.fuel;
+            loadOfficialFuelPrice();
+        }
+    }
+
+    function showCatalog(visible) {
+        if (!catalogHolder) return;
+        catalogHolder.hidden = !visible;
+        if (visible && !catalogPicker && window.FuelWiseCatalog) {
+            catalogPicker = window.FuelWiseCatalog.mount(catalogHolder, {
+                onSelect: applyCatalogVehicle,
+                onClear: () => { catalogVehicle = null; }
+            });
+        }
+    }
+
     vehicleSelect.addEventListener("change", () => {
+
+        showCatalog(vehicleSelect.value === CATALOG_OPTION);
+
+        if (vehicleSelect.value === CATALOG_OPTION) {
+            if (catalogVehicle) applyCatalogVehicle(catalogVehicle);
+            return;
+        }
 
         const selectedOption = vehicleSelect.selectedOptions[0];
         const consumption = Number(selectedOption?.dataset.consumption);
@@ -90,7 +132,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function populateVehicleOptions(userVehicles = []) {
         const currentValue = vehicleSelect.value;
-        vehicleSelect.innerHTML = '<option value="">Manual entry</option>';
+        vehicleSelect.innerHTML = '<option value="__catalog">Choose from catalogue</option><option value="">Manual entry</option>';
         userVehicles.forEach(vehicle => {
             const option = document.createElement("option");
             option.value = vehicle.id;
@@ -101,8 +143,20 @@ document.addEventListener("DOMContentLoaded", () => {
             option.selected = vehicle.id === currentValue || (!currentValue && vehicle.is_default);
             vehicleSelect.append(option);
         });
+        // With no saved vehicle the catalogue is the easiest way in; a saved default still wins.
+        if (currentValue === CATALOG_OPTION || (!userVehicles.length && !manualChosen)) vehicleSelect.value = CATALOG_OPTION;
+        else if (manualChosen && currentValue === "") vehicleSelect.value = "";
         if (vehicleSelect.value) vehicleSelect.dispatchEvent(new Event("change"));
+        else showCatalog(false);
+        // The options were just rebuilt in English; put them back in the active language.
+        const activeLanguage = localStorage.getItem("fuelwise-language");
+        if (activeLanguage && activeLanguage !== "en") window.FuelWiseI18n?.translate(activeLanguage);
     }
+
+    let manualChosen = false;
+    vehicleSelect.addEventListener("change", event => {
+        if (event.isTrusted) manualChosen = vehicleSelect.value === "";
+    });
 
     async function loadSavedVehicles() {
         try {
@@ -263,7 +317,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 maximum_fuel_price: Number(fuelPriceInput.dataset.maximumPrice) || tripInput.fuelPrice,
                 trip_type: tripInput.tripType,
                 traffic_condition: tripInput.trafficCondition,
-                vehicle_name: vehicleSelect.value ? selectedVehicle?.textContent.trim() : "Manual entry",
+                vehicle_name: vehicleSelect.value === CATALOG_OPTION
+                    ? (catalogVehicle?.name.slice(0, 100) || "Manual entry")
+                    : (vehicleSelect.value ? selectedVehicle?.textContent.trim() : "Manual entry"),
                 origin: document.getElementById("route-start-label")?.textContent.trim() || null,
                 destination: document.getElementById("route-end-label")?.textContent.trim() || null
             })
