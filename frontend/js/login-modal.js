@@ -68,6 +68,14 @@ document.addEventListener("DOMContentLoaded", () => {
     loginButtons.forEach(button => button.addEventListener("click", () => {
         if (!button.dataset.authenticated) openModal(button);
     }));
+
+    const loginRequested = new URLSearchParams(window.location.search).get("login") === "1";
+    if (loginRequested) {
+        openModal(loginButtons[0]);
+        const cleanUrl = `${window.location.pathname}${window.location.hash}`;
+        window.history.replaceState({}, "", cleanUrl);
+    }
+
     closeButton.addEventListener("click", closeModal);
     overlay.addEventListener("click", event => { if (event.target === overlay) closeModal(); });
     document.addEventListener("keydown", event => { if (event.key === "Escape" && overlay.classList.contains("active")) closeModal(); });
