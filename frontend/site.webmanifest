@@ -1,0 +1,17 @@
+{
+  "name": "FuelWise",
+  "short_name": "FuelWise",
+  "description": "Smarter fuel cost and trip planning.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "icons": [
+    {
+      "src": "/assets/fuelwise-profile.png",
+      "sizes": "1080x1080",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
