@@ -41,6 +41,9 @@
     <link rel="stylesheet" href="css/pages.css?v=20260806-3">
     <link rel="stylesheet" href="css/login-modal.css?v=20260807-1">
     <link rel="stylesheet" href="css/i18n.css">
+    <link rel="stylesheet" href="css/motion.css?v=20261113-1">
+    <link rel="stylesheet" href="css/home.css?v=20261113-1">
+    <script>document.documentElement.classList.add("js");</script>
 </head>
 
 <body>
@@ -97,38 +100,39 @@
 
     </header>
 
-    <main>
+    <main class="home">
 
-        <section class="hero">
+        <section class="home-hero">
 
-            <div class="container hero-container">
+            <canvas class="hero-roads" aria-hidden="true"></canvas>
+            <div class="hero-blob b1" aria-hidden="true"></div>
+            <div class="hero-blob b2" aria-hidden="true"></div>
+            <div class="hero-blob b3" aria-hidden="true"></div>
 
-                <div class="hero-content">
+            <div class="container home-hero-grid">
 
-                    <p class="hero-badge">
+                <div class="home-hero-copy">
 
+                    <p class="hero-tag">
                         <i data-lucide="car-front" aria-hidden="true"></i>
-
                         Smart Trip Planner
-
                     </p>
 
                     <h1>
-                        Plan Smarter.
-                        <span>Travel Cheaper.</span>
+                        <span class="line"><span class="line-inner">Plan Smarter.</span></span>
+                        <span class="line"><span class="line-inner">Travel Cheaper.</span></span>
                     </h1>
 
-                    <p class="hero-description">
+                    <p class="hero-lead">
                         FuelWise helps you estimate fuel costs,
                         compare routes and plan your journey
                         before you even hit the road.
                     </p>
 
-                    <div class="hero-buttons">
+                    <div class="hero-actions">
 
                         <a href="pages/trip-planner.html" class="primary-btn">
                             Start Planning
-
                             <i data-lucide="arrow-right" aria-hidden="true"></i>
                         </a>
 
@@ -138,214 +142,344 @@
 
                     </div>
 
+                    <ul class="hero-chips">
+                        <li><i data-lucide="circle-check" aria-hidden="true"></i>Official EPDK prices</li>
+                        <li><i data-lucide="circle-check" aria-hidden="true"></i>81 provinces</li>
+                        <li><i data-lucide="circle-check" aria-hidden="true"></i>Free to use</li>
+                    </ul>
+
                 </div>
 
-                <article class="hero-card">
+                <div class="trip-live-wrap">
+                    <div class="trip-live-bob">
 
-                    <div class="hero-card-header">
+                        <article class="trip-live" aria-label="Sample trip estimate">
 
-                        <div>
+                            <div class="trip-live-bar">
+                                <i></i><i></i><i></i>
+                                <span>Sample route</span>
+                                <span class="trip-live-status">Live estimate</span>
+                            </div>
 
-                            <p class="hero-card-label">
-                                Your journey
-                            </p>
+                            <svg class="trip-map" viewBox="0 0 400 220" aria-hidden="true">
+                                <defs>
+                                    <linearGradient id="fw-route-gradient" x1="0" y1="0" x2="1" y2="0">
+                                        <stop offset="0" stop-color="#38bdf8" />
+                                        <stop offset="1" stop-color="#a78bfa" />
+                                    </linearGradient>
+                                </defs>
+                                <g class="grid">
+                                    <line x1="0" y1="44" x2="400" y2="44" />
+                                    <line x1="0" y1="88" x2="400" y2="88" />
+                                    <line x1="0" y1="132" x2="400" y2="132" />
+                                    <line x1="0" y1="176" x2="400" y2="176" />
+                                    <line x1="50" y1="0" x2="50" y2="220" />
+                                    <line x1="100" y1="0" x2="100" y2="220" />
+                                    <line x1="150" y1="0" x2="150" y2="220" />
+                                    <line x1="200" y1="0" x2="200" y2="220" />
+                                    <line x1="250" y1="0" x2="250" y2="220" />
+                                    <line x1="300" y1="0" x2="300" y2="220" />
+                                    <line x1="350" y1="0" x2="350" y2="220" />
+                                </g>
+                                <path class="ghost" d="M-10 96 C 90 70, 150 150, 250 120 S 360 30, 410 60" />
+                                <path class="ghost" d="M210 -10 C 190 60, 260 110, 230 230" />
+                                <path class="route-base" d="" />
+                                <path class="route" d="" />
+                                <circle class="pin-pulse start" r="9" />
+                                <circle class="pin-pulse end" r="9" />
+                                <circle class="pin start" r="7" />
+                                <circle class="pin end" r="7" />
+                                <circle class="car" r="5" />
+                            </svg>
 
-                            <h2>Trip Summary</h2>
+                            <div class="trip-live-body">
 
-                        </div>
+                                <div class="trip-cities">
+                                    <div>
+                                        <small>From</small>
+                                        <strong data-trip="from">Istanbul</strong>
+                                    </div>
+                                    <i data-lucide="move-right" aria-hidden="true"></i>
+                                    <div>
+                                        <small>To</small>
+                                        <strong data-trip="to">Izmir</strong>
+                                    </div>
+                                </div>
 
-                        <div class="hero-card-icon">
+                                <div class="trip-progress"><i></i></div>
 
-                            <i data-lucide="route" aria-hidden="true"></i>
+                                <div class="trip-stats">
 
-                        </div>
+                                    <div class="trip-stat">
+                                        <span><i data-lucide="route" aria-hidden="true"></i>Distance</span>
+                                        <strong data-trip="km">483 km</strong>
+                                    </div>
 
-                    </div>
+                                    <div class="trip-stat">
+                                        <span><i data-lucide="fuel" aria-hidden="true"></i>Fuel use</span>
+                                        <strong data-trip="fuel">30,9 L</strong>
+                                    </div>
 
-                    <div class="trip-item">
+                                    <div class="trip-stat is-cost">
+                                        <span><i data-lucide="wallet" aria-hidden="true"></i>Cost</span>
+                                        <strong data-trip="cost">₺1.700</strong>
+                                    </div>
 
-                        <span class="trip-label">
+                                </div>
 
-                            <i data-lucide="map-pin" aria-hidden="true"></i>
+                            </div>
 
-                            From
-
-                        </span>
-
-                        <strong>Istanbul</strong>
-
-                    </div>
-
-                    <div class="trip-item">
-
-                        <span class="trip-label">
-
-                            <i data-lucide="flag" aria-hidden="true"></i>
-
-                            To
-
-                        </span>
-
-                        <strong>Izmir</strong>
-
-                    </div>
-
-                    <div class="trip-item">
-
-                        <span class="trip-label">
-
-                            <i data-lucide="route" aria-hidden="true"></i>
-
-                            Distance
-
-                        </span>
-
-                        <strong>483 km</strong>
-
-                    </div>
-
-                    <div class="trip-item">
-
-                        <span class="trip-label">
-
-                            <i data-lucide="fuel" aria-hidden="true"></i>
-
-                            Fuel
-
-                        </span>
-
-                        <strong>18.4 L</strong>
-
-                    </div>
-
-                    <div class="trip-item">
-
-                        <span class="trip-label">
-
-                            <i data-lucide="wallet" aria-hidden="true"></i>
-
-                            Cost
-
-                        </span>
-
-                        <strong>₺1,032</strong>
+                        </article>
 
                     </div>
-
-                </article>
+                </div>
 
             </div>
 
         </section>
 
+        <div class="home-marquee" aria-hidden="true">
+            <div class="marquee-track">
+                <div class="marquee-group">
+                    <span>Route Planning</span>
+                    <span>Official EPDK prices</span>
+                    <span>81 provinces</span>
+                    <span>Gasoline</span>
+                    <span>Diesel</span>
+                    <span>LPG</span>
+                    <span>Traffic profiles</span>
+                    <span>Vehicle garage</span>
+                    <span>Fuel Stops</span>
+                </div>
+            </div>
+        </div>
+
         <section class="features-section">
 
             <div class="container">
 
-                <div class="section-heading">
+                <div class="section-heading" data-reveal>
 
                     <p class="section-badge">
-
-                        <i data-lucide="sparkles"></i>
-
+                        <i data-lucide="sparkles" aria-hidden="true"></i>
                         Why FuelWise?
-
                     </p>
 
                     <h2>
-
                         Everything you need
-
                         <span>for smarter trips.</span>
-
                     </h2>
 
                     <p>
-
                         Designed to help drivers calculate costs,
                         manage vehicles and travel more efficiently.
-
                     </p>
 
                 </div>
 
                 <div class="features-grid">
 
-                    <article class="feature-card">
-
-                        <div class="feature-icon">
-
-                            <i data-lucide="calculator"></i>
-
-                        </div>
-
+                    <article class="feature-card" data-reveal data-delay="0" data-spotlight>
+                        <div class="feature-icon"><i data-lucide="calculator" aria-hidden="true"></i></div>
                         <h3>Instant Calculations</h3>
-
                         <p>
-
                             Estimate fuel usage and total trip
                             costs within seconds.
-
                         </p>
-
+                        <a class="feature-link" href="pages/trip-planner.html">Trip Planner<i data-lucide="arrow-right" aria-hidden="true"></i></a>
                     </article>
 
-                    <article class="feature-card">
-
-                        <div class="feature-icon">
-
-                            <i data-lucide="car-front"></i>
-
-                        </div>
-
+                    <article class="feature-card" data-reveal data-delay="1" data-spotlight>
+                        <div class="feature-icon"><i data-lucide="car-front" aria-hidden="true"></i></div>
                         <h3>Vehicle Library</h3>
-
                         <p>
-
                             Save all of your vehicles and
                             switch between them instantly.
-
                         </p>
-
+                        <a class="feature-link" href="pages/vehicles.html">Vehicles<i data-lucide="arrow-right" aria-hidden="true"></i></a>
                     </article>
 
-                    <article class="feature-card">
-
-                        <div class="feature-icon">
-
-                            <i data-lucide="map"></i>
-
-                        </div>
-
+                    <article class="feature-card" data-reveal data-delay="2" data-spotlight>
+                        <div class="feature-icon"><i data-lucide="map" aria-hidden="true"></i></div>
                         <h3>Route Planning</h3>
-
                         <p>
-
                             Plan every journey with accurate
                             distance and fuel estimates.
-
                         </p>
-
+                        <a class="feature-link" href="pages/trip-planner.html">Trip Planner<i data-lucide="arrow-right" aria-hidden="true"></i></a>
                     </article>
 
-                    <article class="feature-card">
-
-                        <div class="feature-icon">
-
-                            <i data-lucide="fuel"></i>
-
-                        </div>
-
+                    <article class="feature-card" data-reveal data-delay="3" data-spotlight>
+                        <div class="feature-icon"><i data-lucide="fuel" aria-hidden="true"></i></div>
                         <h3>Live Fuel Prices</h3>
-
                         <p>
+                            Official EPDK gasoline, diesel and LPG
+                            prices for every province in Türkiye.
+                        </p>
+                        <a class="feature-link" href="pages/fuel-prices.html">Fuel Prices<i data-lucide="arrow-right" aria-hidden="true"></i></a>
+                    </article>
 
-                            Coming soon with real-time fuel
-                            prices across Türkiye.
+                </div>
 
+            </div>
+
+        </section>
+
+        <section class="home-steps">
+
+            <div class="container">
+
+                <div class="section-heading" data-reveal>
+
+                    <p class="section-badge">
+                        <i data-lucide="list-ordered" aria-hidden="true"></i>
+                        How it works
+                    </p>
+
+                    <h2>
+                        Three steps
+                        <span>to a clear answer.</span>
+                    </h2>
+
+                </div>
+
+                <div class="steps-grid">
+
+                    <div class="steps-line" aria-hidden="true"><i></i></div>
+
+                    <article class="step-card" data-reveal data-delay="0">
+                        <div class="step-number"><i data-lucide="map-pinned" aria-hidden="true"></i></div>
+                        <small>01</small>
+                        <h3>Choose your route</h3>
+                        <p>Search an address or tap the map. FuelWise measures the real road distance for you.</p>
+                    </article>
+
+                    <article class="step-card" data-reveal data-delay="2">
+                        <div class="step-number"><i data-lucide="car-front" aria-hidden="true"></i></div>
+                        <small>02</small>
+                        <h3>Pick your vehicle</h3>
+                        <p>Use a vehicle saved in your garage, with its own consumption and tank capacity.</p>
+                    </article>
+
+                    <article class="step-card" data-reveal data-delay="4">
+                        <div class="step-number"><i data-lucide="wallet" aria-hidden="true"></i></div>
+                        <small>03</small>
+                        <h3>See the real cost</h3>
+                        <p>Get minimum and maximum fuel, cost and fuel-stop estimates based on traffic and official prices.</p>
+                    </article>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <section class="home-stats">
+
+            <div class="container stats-grid">
+
+                <div class="stat-item" data-reveal data-delay="0">
+                    <strong data-count="81">81</strong>
+                    <span>Provinces covered</span>
+                </div>
+
+                <div class="stat-item" data-reveal data-delay="1">
+                    <strong data-count="3">3</strong>
+                    <span>Fuel types</span>
+                </div>
+
+                <div class="stat-item" data-reveal data-delay="2">
+                    <strong data-count="4">4</strong>
+                    <span>Traffic profiles</span>
+                </div>
+
+                <div class="stat-item" data-reveal data-delay="3">
+                    <strong data-count="4">4</strong>
+                    <span>Languages</span>
+                </div>
+
+            </div>
+
+        </section>
+
+        <section class="home-prices" hidden>
+
+            <div class="container">
+
+                <div class="prices-panel" data-reveal="zoom">
+
+                    <div class="section-heading">
+
+                        <p class="section-badge">
+                            <i data-lucide="badge-check" aria-hidden="true"></i>
+                            Official EPDK
                         </p>
 
-                    </article>
+                        <h2>
+                            Today at the pump
+                            <span>in Istanbul.</span>
+                        </h2>
+
+                        <p>Official average pump prices from EPDK, refreshed every six hours.</p>
+
+                        <a class="feature-link" href="pages/fuel-prices.html">View all provinces<i data-lucide="arrow-right" aria-hidden="true"></i></a>
+
+                    </div>
+
+                    <div class="prices-cards">
+
+                        <article class="price-tile" data-home-price="gasoline">
+                            <span><i data-lucide="droplets" aria-hidden="true"></i>Gasoline</span>
+                            <strong>—</strong>
+                            <small>average per litre</small>
+                        </article>
+
+                        <article class="price-tile" data-home-price="diesel">
+                            <span><i data-lucide="fuel" aria-hidden="true"></i>Diesel</span>
+                            <strong>—</strong>
+                            <small>average per litre</small>
+                        </article>
+
+                        <article class="price-tile" data-home-price="lpg">
+                            <span><i data-lucide="flame" aria-hidden="true"></i>LPG</span>
+                            <strong>—</strong>
+                            <small>average per litre</small>
+                        </article>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <section class="home-cta">
+
+            <div class="container">
+
+                <div class="cta-panel" data-reveal="zoom">
+
+                    <h2>Ready to calculate a journey?</h2>
+
+                    <p>Plan a journey and get your distance, required fuel, range and estimated cost.</p>
+
+                    <div class="cta-actions">
+
+                        <a href="pages/trip-planner.html" class="primary-btn">
+                            Start Planning
+                            <i data-lucide="arrow-right" aria-hidden="true"></i>
+                        </a>
+
+                        <a href="pages/register.html" class="secondary-btn">
+                            Create Account
+                        </a>
+
+                    </div>
+
+                    <svg class="cta-road" viewBox="0 0 1200 14" preserveAspectRatio="none" aria-hidden="true">
+                        <line x1="0" y1="7" x2="1200" y2="7" />
+                    </svg>
 
                 </div>
 
@@ -1257,9 +1391,11 @@
     </footer>
 
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="js/motion.js?v=20261113-1"></script>
+    <script src="js/home.js?v=20261113-1"></script>
     <script src="js/login-modal.js?v=20260807-1"></script>
     <script src="js/auth-client.js?v=20260806-4"></script>
-    <script src="js/i18n.js?v=20260806-5"></script>
+    <script src="js/i18n.js?v=20261113-1"></script>
 
 </body>
 
