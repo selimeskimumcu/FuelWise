@@ -96,6 +96,14 @@
         ,"in Istanbul.": ["İstanbul'da.","в Стамбуле.","伊斯坦布尔。"]
         ,"Official average pump prices from EPDK, refreshed every six hours.": ["EPDK'den alınan resmî ortalama pompa fiyatları, altı saatte bir yenilenir.","Официальные средние цены EPDK, обновляются каждые шесть часов.","来自 EPDK 的官方平均油价，每六小时更新。"]
         ,"View all provinces": ["Tüm illeri gör","Все регионы","查看所有省份"]
+        ,"Cookie Preferences": ["Çerez Tercihleri","Настройки cookie","Cookie 设置"]
+        ,"I agree to the": ["Şunları kabul ediyorum:","Я принимаю","我同意"]
+        ,"and": ["ve","и","和"]
+        ,"Add and manage vehicles saved securely in your FuelWise account.": ["FuelWise hesabınıza güvenle kaydedilen araçları ekleyin ve yönetin.","Добавляйте транспорт, надёжно сохранённый в аккаунте FuelWise, и управляйте им.","添加并管理安全保存在 FuelWise 账户中的车辆。"]
+        ,"Choose your saved vehicle directly in the Trip Planner.": ["Kayıtlı aracınızı doğrudan Yolculuk Planlayıcıda seçin.","Выберите сохранённый транспорт прямо в планировщике.","直接在行程规划中选择已保存的车辆。"]
+        ,"“Know what the journey will cost before the road begins.”": ["“Yol başlamadan önce yolculuğun neye mal olacağını bilin.”","«Узнайте стоимость поездки ещё до выезда.»","“出发之前，先知道这趟行程要花多少。”"]
+        ,"Designed and developed in Istanbul with clarity, speed and practical driving needs at its core.": ["Netlik, hız ve pratik sürüş ihtiyaçları merkeze alınarak İstanbul'da tasarlandı ve geliştirildi.","Создано в Стамбуле с упором на ясность, скорость и практические нужды водителей.","在伊斯坦布尔设计和开发，以清晰、快速和实用的驾驶需求为核心。"]
+        ,"Trips": ["Yolculuk","Поездок","行程"]
     };
 
     const langIndex = { tr: 0, ru: 1, zh: 2 };
@@ -138,6 +146,7 @@
         document.querySelectorAll(".language-option").forEach(option => option.classList.toggle("active", option.dataset.lang === lang));
         document.querySelectorAll(".language-current").forEach(label => label.textContent = languages[lang].short);
         localStorage.setItem("fuelwise-language", lang);
+        document.dispatchEvent(new CustomEvent("fuelwise:language", { detail: lang }));
     }
 
     function createSwitcher() {

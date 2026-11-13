@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="../css/pages.css">
     <link rel="stylesheet" href="../css/register.css">
     <link rel="stylesheet" href="../css/i18n.css">
+    <link rel="stylesheet" href="../css/motion.css?v=20261113-2">
 </head>
 <body class="register-page">
     <main class="register-shell">
@@ -55,7 +56,7 @@
                     <ul><li data-rule="length">At least 8 characters</li><li data-rule="upper">One uppercase letter</li><li data-rule="number">One number</li></ul>
                 </div>
 
-                <label class="terms-check"><input type="checkbox" id="terms" required><span>I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.</span></label>
+                <label class="terms-check"><input type="checkbox" id="terms" required><span>I agree to the <a href="terms.html">Terms of Service</a> and <a href="privacy.html">Privacy Policy</a>.</span></label>
                 <p class="register-message" id="register-message" role="alert"></p>
                 <button type="submit" class="primary-btn register-submit"><i data-lucide="user-plus"></i>Create Account</button>
             </form>
@@ -71,14 +72,14 @@
             <p>© 2026 FuelWise. All rights reserved.</p>
             <p>Designed &amp; Developed by Selim Eskimumcu <span class="version-badge">v1.0.0 Beta</span></p>
             <div class="register-legal">
-                <a href="#">Privacy Policy</a>
-                <a href="#">Terms of Service</a>
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Terms of Service</a><a href="#" data-cookie-settings>Cookie Preferences</a>
             </div>
         </div>
     </footer>
 
     <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="../js/register.js"></script>
-    <script src="../js/i18n.js?v=20260806-3"></script>
+    <script src="../js/motion.js?v=20261113-2"></script><script src="../js/register.js"></script>
+    <script src="../js/cookie-consent.js?v=20261113-2"></script><script src="../js/i18n.js?v=20261113-2"></script>
 </body>
 </html>

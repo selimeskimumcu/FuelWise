@@ -1,8 +1,7 @@
-/* FuelWise — home page animations. Loaded before i18n.js so cloned text gets translated. */
+/* FuelWise — home page animations. Needs motion.js; loaded before i18n.js so cloned text gets translated. */
 (() => {
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const easeInOut = t => (t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
-    const easeOut = t => 1 - Math.pow(1 - t, 3);
     const formatNumber = (value, digits = 0) => Number(value).toLocaleString("tr-TR", {
         minimumFractionDigits: digits,
         maximumFractionDigits: digits
@@ -14,106 +13,6 @@
         const clone = marqueeGroup.cloneNode(true);
         clone.setAttribute("aria-hidden", "true");
         marqueeGroup.after(clone);
-    }
-
-    /* ---------- Hero background: headlights travelling along roads ---------- */
-    const canvas = document.querySelector(".hero-roads");
-    if (canvas) {
-        const context = canvas.getContext("2d");
-        const roads = [
-            { points: [[-.05, .78], [.28, .5], [.5, 1.02], [1.05, .58]], speed: .055, offsets: [0, .52] },
-            { points: [[-.05, .2], [.3, .46], [.62, -.08], [1.05, .3]], speed: .042, offsets: [.25, .8] },
-            { points: [[.34, -.05], [.5, .35], [.2, .62], [.46, 1.05]], speed: .05, offsets: [.1] },
-            { points: [[.7, -.05], [.56, .4], [.98, .55], [.78, 1.05]], speed: .047, offsets: [.4, .9] }
-        ];
-        let width = 0;
-        let height = 0;
-        let running = false;
-        let frame = 0;
-
-        const pointAt = (road, t) => {
-            const [a, b, c, d] = road.points;
-            const u = 1 - t;
-            const x = u * u * u * a[0] + 3 * u * u * t * b[0] + 3 * u * t * t * c[0] + t * t * t * d[0];
-            const y = u * u * u * a[1] + 3 * u * u * t * b[1] + 3 * u * t * t * c[1] + t * t * t * d[1];
-            return [x * width, y * height];
-        };
-
-        function resize() {
-            const ratio = Math.min(window.devicePixelRatio || 1, 2);
-            width = canvas.clientWidth;
-            height = canvas.clientHeight;
-            canvas.width = width * ratio;
-            canvas.height = height * ratio;
-            context.setTransform(ratio, 0, 0, ratio, 0, 0);
-        }
-
-        function draw(time) {
-            context.clearRect(0, 0, width, height);
-            context.lineCap = "round";
-
-            roads.forEach(road => {
-                const [a, b, c, d] = road.points;
-                context.beginPath();
-                context.moveTo(a[0] * width, a[1] * height);
-                context.bezierCurveTo(b[0] * width, b[1] * height, c[0] * width, c[1] * height, d[0] * width, d[1] * height);
-                context.strokeStyle = "rgba(125, 211, 252, 0.07)";
-                context.lineWidth = 1.5;
-                context.stroke();
-
-                road.offsets.forEach(offset => {
-                    const head = (time / 1000 * road.speed + offset) % 1;
-                    for (let step = 0; step < 18; step++) {
-                        const t1 = head - step * .006;
-                        const t2 = t1 - .006;
-                        if (t2 < 0) break;
-                        const [x1, y1] = pointAt(road, t1);
-                        const [x2, y2] = pointAt(road, t2);
-                        context.beginPath();
-                        context.moveTo(x1, y1);
-                        context.lineTo(x2, y2);
-                        context.strokeStyle = `rgba(125, 211, 252, ${(.55 * (1 - step / 18)).toFixed(3)})`;
-                        context.lineWidth = 2;
-                        context.stroke();
-                    }
-                    const [x, y] = pointAt(road, head);
-                    const glow = context.createRadialGradient(x, y, 0, x, y, 12);
-                    glow.addColorStop(0, "rgba(186, 230, 253, 0.9)");
-                    glow.addColorStop(1, "rgba(56, 189, 248, 0)");
-                    context.fillStyle = glow;
-                    context.beginPath();
-                    context.arc(x, y, 12, 0, Math.PI * 2);
-                    context.fill();
-                });
-            });
-        }
-
-        function loop(time) {
-            if (!running) return;
-            draw(time);
-            frame = requestAnimationFrame(loop);
-        }
-
-        function setRunning(next) {
-            if (next === running) return;
-            running = next;
-            cancelAnimationFrame(frame);
-            if (running) frame = requestAnimationFrame(loop);
-        }
-
-        resize();
-        window.addEventListener("resize", () => { resize(); if (!running) draw(4000); });
-
-        if (reduceMotion) {
-            draw(4000);
-        } else {
-            let visible = true;
-            new IntersectionObserver(entries => {
-                visible = entries[0].isIntersecting;
-                setRunning(visible && !document.hidden);
-            }).observe(canvas);
-            document.addEventListener("visibilitychange", () => setRunning(visible && !document.hidden));
-        }
     }
 
     /* ---------- Live trip card ---------- */
@@ -246,32 +145,7 @@
     }
 
     /* ---------- Count-up numbers ---------- */
-    function countUp(element, target, { digits = 0, prefix = "", duration = 1600 } = {}) {
-        if (reduceMotion) {
-            element.textContent = prefix + formatNumber(target, digits);
-            return;
-        }
-        const started = performance.now();
-        function step(now) {
-            const progress = Math.min((now - started) / duration, 1);
-            element.textContent = prefix + formatNumber(target * easeOut(progress), digits);
-            if (progress < 1) requestAnimationFrame(step);
-        }
-        requestAnimationFrame(step);
-    }
-
-    function countWhenVisible(element, target, options) {
-        if (!("IntersectionObserver" in window)) {
-            countUp(element, target, options);
-            return;
-        }
-        const observer = new IntersectionObserver(entries => {
-            if (!entries[0].isIntersecting) return;
-            observer.disconnect();
-            countUp(element, target, options);
-        }, { threshold: .5 });
-        observer.observe(element);
-    }
+    const { countWhenVisible } = window.FuelWiseMotion;
 
     document.querySelectorAll("[data-count]").forEach(element => {
         countWhenVisible(element, Number(element.dataset.count));

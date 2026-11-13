@@ -241,3 +241,815 @@
     .primary-btn:hover::before { animation: none; }
     .scroll-progress { display: none; }
 }
+
+/* =========================================================
+   Shared living backdrop (inner heroes, account pages)
+========================================================= */
+.fw-roads {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    -webkit-mask-image: radial-gradient(ellipse at 50% 50%, #000 35%, transparent 90%);
+    mask-image: radial-gradient(ellipse at 50% 50%, #000 35%, transparent 90%);
+}
+
+.fw-blob {
+    position: absolute;
+    z-index: 0;
+    border-radius: 50%;
+    filter: blur(90px);
+    pointer-events: none;
+    animation: fw-drift 12s ease-in-out infinite;
+}
+
+.fw-blob.b1 {
+    width: 380px;
+    height: 380px;
+    top: -120px;
+    right: 6%;
+    background: #2563eb;
+    opacity: .34;
+}
+
+.fw-blob.b2 {
+    width: 320px;
+    height: 320px;
+    bottom: -170px;
+    left: 4%;
+    background: #7c3aed;
+    opacity: .24;
+    animation-delay: -6s;
+}
+
+@keyframes fw-drift {
+    50% { transform: translate(30px, -26px) scale(1.1); }
+}
+
+@keyframes fw-up {
+    from { opacity: 0; transform: translateY(22px); }
+    to { opacity: 1; transform: none; }
+}
+
+@keyframes fw-text-sheen {
+    to { background-position: -220% 0; }
+}
+
+/* ---------- Inner page hero ---------- */
+.js .page-hero-container {
+    animation: none;
+}
+
+.js .page-hero-container > * {
+    animation: fw-up .9s cubic-bezier(.2, .7, .2, 1) backwards;
+}
+
+.js .page-hero-container > :nth-child(2) { animation-delay: .12s; }
+.js .page-hero-container > :nth-child(3) { animation-delay: .26s; }
+.js .page-hero-container > :nth-child(4) { animation-delay: .38s; }
+
+.page-hero h1 span {
+    background: linear-gradient(90deg, #38bdf8, #818cf8 45%, #38bdf8 90%);
+    background-size: 220% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: none;
+    padding-bottom: .1em;
+    animation: fw-text-sheen 7s linear infinite;
+}
+
+/* Reveal-on-scroll replaces the old load-time entrance animations */
+.js .content-section .section-heading,
+.js .content-section .split-layout,
+.js .glass-grid .glass-card,
+.js .empty-action {
+    animation: none;
+}
+
+/* ---------- Cards: spotlight, top line, icon tilt ---------- */
+.glass-card,
+.history-card,
+.legal-section {
+    position: relative;
+    overflow: hidden;
+}
+
+.js .glass-card,
+.js .glass-card:hover,
+.js .vehicle-card,
+.js .vehicle-card:hover,
+.js .history-card,
+.js .history-card:hover,
+.js .legal-section {
+    background-image: radial-gradient(380px circle at var(--mx, 50%) var(--my, -60%), rgba(56, 189, 248, .13), transparent 46%);
+}
+
+.glass-card::after,
+.history-card::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, #38bdf8, #818cf8);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform .45s cubic-bezier(.2, .7, .2, 1);
+}
+
+.glass-card:hover::after,
+.history-card:hover::after {
+    transform: scaleX(1);
+}
+
+.card-icon {
+    transition: transform .4s cubic-bezier(.2, .7, .2, 1), box-shadow .4s ease;
+}
+
+.glass-card:hover .card-icon {
+    transform: rotate(-8deg) scale(1.1);
+    box-shadow: 0 10px 26px rgba(56, 189, 248, .24);
+}
+
+.story-panel {
+    position: relative;
+    overflow: hidden;
+}
+
+.story-panel::before {
+    content: "";
+    position: absolute;
+    width: 260px;
+    height: 260px;
+    top: -120px;
+    right: -90px;
+    border-radius: 50%;
+    background: rgba(124, 58, 237, .4);
+    filter: blur(70px);
+    pointer-events: none;
+    animation: fw-drift 10s ease-in-out infinite;
+}
+
+.story-panel > * {
+    position: relative;
+}
+
+.metric {
+    transition: transform .3s ease, background .3s ease;
+}
+
+.metric:hover {
+    transform: translateY(-4px);
+    background: rgba(56, 189, 248, .08);
+}
+
+.empty-action {
+    transition: border-color .35s ease, background .35s ease;
+}
+
+.empty-action:hover {
+    border-color: rgba(56, 189, 248, .6);
+    background: rgba(56, 189, 248, .08);
+}
+
+/* ---------- Values that just changed ---------- */
+.fw-pop {
+    animation: fw-pop .7s cubic-bezier(.2, .7, .2, 1);
+}
+
+@keyframes fw-pop {
+    0% { transform: scale(.9); filter: brightness(1.9); }
+    45% { transform: scale(1.07); }
+    100% { transform: none; filter: none; }
+}
+
+.result-card strong {
+    display: inline-block;
+    transform-origin: left center;
+}
+
+.price-value {
+    transform-origin: left center;
+}
+
+.result-card {
+    transition: transform .3s ease, border-color .3s ease;
+}
+
+.result-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(56, 189, 248, .3);
+}
+
+.status-chip::before {
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, .6);
+    animation: fw-chip-ping 1.8s ease-out infinite;
+}
+
+@keyframes fw-chip-ping {
+    to { box-shadow: 0 0 0 8px rgba(34, 197, 94, 0); }
+}
+
+/* ---------- Dynamically rendered lists ---------- */
+.vehicle-list .vehicle-card,
+.history-list .history-card {
+    animation: fw-up .7s cubic-bezier(.2, .7, .2, 1) backwards;
+}
+
+.vehicle-list .vehicle-card:nth-child(2),
+.history-list .history-card:nth-child(2) { animation-delay: .09s; }
+.vehicle-list .vehicle-card:nth-child(3),
+.history-list .history-card:nth-child(3) { animation-delay: .18s; }
+.vehicle-list .vehicle-card:nth-child(4) { animation-delay: .27s; }
+.vehicle-list .vehicle-card:nth-child(n+5) { animation-delay: .36s; }
+
+/* ---------- Login modal ---------- */
+.login-modal::before {
+    animation: fw-drift 9s ease-in-out infinite;
+}
+
+.login-modal::after {
+    content: "";
+    position: absolute;
+    width: 240px;
+    height: 240px;
+    right: -130px;
+    bottom: -150px;
+    border-radius: 50%;
+    background: rgba(124, 58, 237, .3);
+    filter: blur(60px);
+    pointer-events: none;
+    animation: fw-drift 11s ease-in-out -5s infinite;
+}
+
+.login-modal-overlay.active .login-heading,
+.login-modal-overlay.active .login-field,
+.login-modal-overlay.active .login-submit,
+.login-modal-overlay.active .forgot-password-link,
+.login-modal-overlay.active .login-motto {
+    animation: fw-up .6s cubic-bezier(.2, .7, .2, 1) backwards;
+}
+
+.login-modal-overlay.active .login-heading { animation-delay: .08s; }
+.login-modal-overlay.active .login-field:nth-of-type(1) { animation-delay: .16s; }
+.login-modal-overlay.active .login-field:nth-of-type(2) { animation-delay: .24s; }
+.login-modal-overlay.active .login-submit { animation-delay: .32s; }
+.login-modal-overlay.active .forgot-password-link { animation-delay: .4s; }
+.login-modal-overlay.active .login-motto { animation-delay: .46s; }
+
+.login-input-wrap svg,
+.register-input svg {
+    transition: color .25s ease, transform .25s ease;
+}
+
+.login-input-wrap:focus-within svg,
+.register-input:focus-within svg {
+    color: #38bdf8;
+    transform: scale(1.12);
+}
+
+/* ---------- Register / password reset pages ---------- */
+.fw-page-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.register-card {
+    box-shadow:
+        0 35px 100px rgba(2, 6, 23, .42),
+        0 0 80px rgba(37, 99, 235, .14),
+        inset 0 1px 0 rgba(255, 255, 255, .04);
+}
+
+.register-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #38bdf8, #818cf8, transparent);
+    background-size: 200% 100%;
+    animation: fw-text-sheen 5s linear infinite;
+}
+
+.js .register-logo {
+    animation: fw-up .7s cubic-bezier(.2, .7, .2, 1) backwards;
+}
+
+.js .register-heading,
+.js .register-field,
+.js .password-rules,
+.js .terms-check,
+.js .register-submit,
+.js .register-login {
+    animation: fw-up .65s cubic-bezier(.2, .7, .2, 1) backwards;
+}
+
+.js .register-heading { animation-delay: .15s; }
+.js .register-field:nth-child(1) { animation-delay: .22s; }
+.js .register-field:nth-child(2) { animation-delay: .28s; }
+.js .register-field:nth-child(3) { animation-delay: .34s; }
+.js .register-field:nth-child(4) { animation-delay: .4s; }
+.js .register-field:nth-child(5) { animation-delay: .46s; }
+.js .password-rules { animation-delay: .52s; }
+.js .terms-check { animation-delay: .58s; }
+.js .register-submit { animation-delay: .64s; }
+.js .register-login { animation-delay: .7s; }
+
+.password-rules li {
+    transition: color .3s ease, transform .3s ease;
+}
+
+.password-rules li.valid {
+    transform: translateX(3px);
+}
+
+.terms-check a:hover,
+.register-login button:hover {
+    text-decoration: underline;
+}
+
+/* ---------- Profile ---------- */
+.profile-section {
+    position: relative;
+    overflow: hidden;
+}
+
+.profile-section > .container {
+    position: relative;
+    z-index: 1;
+}
+
+.profile-avatar {
+    box-shadow: 0 0 0 0 rgba(56, 189, 248, .45);
+    animation: fw-avatar 2.8s ease-out infinite;
+}
+
+@keyframes fw-avatar {
+    70%, 100% { box-shadow: 0 0 0 18px rgba(56, 189, 248, 0); }
+}
+
+.js .profile-detail {
+    animation: fw-up .6s cubic-bezier(.2, .7, .2, 1) backwards;
+    transition: background .25s ease, transform .25s ease;
+}
+
+.js .profile-detail:nth-child(1) { animation-delay: .25s; }
+.js .profile-detail:nth-child(2) { animation-delay: .33s; }
+.js .profile-detail:nth-child(3) { animation-delay: .41s; }
+
+.profile-detail:hover {
+    background: rgba(56, 189, 248, .08);
+}
+
+.security-modal-overlay.active .security-icon {
+    animation: fw-pop .7s cubic-bezier(.2, .7, .2, 1);
+}
+
+/* ---------- Footer ---------- */
+.footer-legal a,
+.register-legal a {
+    position: relative;
+}
+
+.footer-legal a::after,
+.register-legal a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -3px;
+    height: 1px;
+    background: #7dd3fc;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform .3s ease;
+}
+
+.footer-legal a:hover::after,
+.register-legal a:hover::after {
+    transform: scaleX(1);
+}
+
+/* =========================================================
+   Legal pages
+========================================================= */
+.legal-layout {
+    display: grid;
+    grid-template-columns: 270px minmax(0, 1fr);
+    align-items: start;
+    gap: 44px;
+}
+
+.legal-toc {
+    position: sticky;
+    top: 104px;
+    padding: 22px;
+    border: 1px solid rgba(148, 163, 184, .12);
+    border-radius: 20px;
+    background: rgba(15, 23, 42, .62);
+}
+
+.legal-toc h2 {
+    margin-bottom: 14px;
+    color: #94a3b8;
+    font-size: 12px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+}
+
+.legal-toc ol {
+    display: grid;
+    gap: 2px;
+    list-style: none;
+}
+
+.legal-toc a {
+    display: block;
+    padding: 9px 12px;
+    border-left: 2px solid transparent;
+    border-radius: 0 10px 10px 0;
+    color: #94a3b8;
+    font-size: 14px;
+    line-height: 1.4;
+    transition: color .25s ease, background .25s ease, border-color .25s ease;
+}
+
+.legal-toc a:hover {
+    color: #e2e8f0;
+}
+
+.legal-toc a.active {
+    border-left-color: #38bdf8;
+    background: rgba(56, 189, 248, .08);
+    color: #7dd3fc;
+}
+
+.legal-body {
+    display: grid;
+    gap: 18px;
+}
+
+.legal-section {
+    padding: 30px 32px;
+    border: 1px solid rgba(148, 163, 184, .12);
+    border-radius: 22px;
+    background-color: rgba(15, 23, 42, .62);
+    scroll-margin-top: 104px;
+    transition: border-color .3s ease;
+}
+
+.legal-section:hover,
+.legal-section:target {
+    border-color: rgba(56, 189, 248, .3);
+}
+
+.legal-section h2 {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 14px;
+    font-size: 22px;
+    letter-spacing: -.02em;
+}
+
+.legal-section h2 small {
+    color: #818cf8;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .12em;
+}
+
+.legal-section p,
+.legal-section li {
+    color: #a8b5c8;
+    line-height: 1.8;
+}
+
+.legal-section p + p,
+.legal-section p + ul,
+.legal-section ul + p {
+    margin-top: 12px;
+}
+
+.legal-section ul {
+    display: grid;
+    gap: 8px;
+    list-style: none;
+}
+
+.legal-section li {
+    position: relative;
+    padding-left: 22px;
+}
+
+.legal-section li::before {
+    content: "";
+    position: absolute;
+    left: 2px;
+    top: .72em;
+    width: 7px;
+    height: 7px;
+    border-radius: 2px;
+    background: #38bdf8;
+    transform: rotate(45deg);
+}
+
+.legal-section strong {
+    color: #e2e8f0;
+}
+
+.legal-section a,
+.legal-note a {
+    color: #7dd3fc;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.legal-updated {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 22px;
+    padding: 8px 14px;
+    border: 1px solid rgba(148, 163, 184, .14);
+    border-radius: 999px;
+    color: #94a3b8;
+    font-size: 13px;
+}
+
+.legal-note {
+    padding: 18px 22px;
+    border: 1px dashed rgba(56, 189, 248, .28);
+    border-radius: 16px;
+    background: rgba(56, 189, 248, .045);
+    color: #94a3b8;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+@media (max-width: 900px) {
+    .legal-layout {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+
+    .legal-toc {
+        position: static;
+    }
+
+    .legal-section {
+        padding: 24px 22px;
+    }
+}
+
+/* =========================================================
+   Cookie consent
+========================================================= */
+.cookie-consent {
+    position: fixed;
+    left: 50%;
+    bottom: 22px;
+    z-index: 9000;
+    width: min(680px, calc(100% - 28px));
+    max-height: calc(100vh - 44px);
+    overflow-y: auto;
+    padding: 24px 26px;
+    border: 1px solid rgba(56, 189, 248, .28);
+    border-radius: 22px;
+    background: rgba(11, 18, 36, .94);
+    -webkit-backdrop-filter: blur(18px);
+    backdrop-filter: blur(18px);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, .55), 0 0 60px rgba(37, 99, 235, .18);
+    color: #e2e8f0;
+    opacity: 0;
+    visibility: hidden;
+    transform: translate(-50%, 28px);
+    transition: opacity .45s ease, transform .45s cubic-bezier(.2, .7, .2, 1), visibility .45s;
+}
+
+.cookie-consent.is-open {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, 0);
+}
+
+.cookie-consent h2 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+    font-size: 17px;
+}
+
+.cookie-consent h2 svg {
+    width: 20px;
+    height: 20px;
+    color: #38bdf8;
+}
+
+.cookie-consent p {
+    color: #94a3b8;
+    font-size: 14px;
+    line-height: 1.65;
+}
+
+.cookie-consent p a {
+    color: #7dd3fc;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.cookie-actions {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.cookie-actions button {
+    padding: 12px 14px;
+    border: 1px solid rgba(148, 163, 184, .2);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, .03);
+    color: #f8fafc;
+    font-size: 14px;
+    font-weight: 600;
+    transition: transform .25s ease, background .25s ease, border-color .25s ease, box-shadow .25s ease;
+}
+
+.cookie-actions button:hover {
+    transform: translateY(-2px);
+    border-color: rgba(56, 189, 248, .5);
+    background: rgba(56, 189, 248, .08);
+}
+
+.cookie-actions .cookie-accept {
+    border-color: transparent;
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+}
+
+.cookie-actions .cookie-accept:hover {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    box-shadow: 0 12px 28px rgba(59, 130, 246, .35);
+}
+
+.cookie-options {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows .4s cubic-bezier(.2, .7, .2, 1);
+}
+
+.cookie-consent.show-options .cookie-options {
+    grid-template-rows: 1fr;
+}
+
+.cookie-options > div {
+    overflow: hidden;
+}
+
+.cookie-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    margin-top: 12px;
+    padding: 14px 16px;
+    border: 1px solid rgba(148, 163, 184, .12);
+    border-radius: 14px;
+    background: rgba(15, 23, 42, .6);
+}
+
+.cookie-option:first-child {
+    margin-top: 18px;
+}
+
+.cookie-option strong {
+    display: block;
+    margin-bottom: 3px;
+    font-size: 14px;
+}
+
+.cookie-option span {
+    color: #94a3b8;
+    font-size: 13px;
+    line-height: 1.55;
+}
+
+.cookie-switch {
+    position: relative;
+    flex: 0 0 auto;
+    width: 44px;
+    height: 24px;
+}
+
+.cookie-switch input {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.cookie-switch input:disabled {
+    cursor: not-allowed;
+}
+
+.cookie-switch i {
+    position: absolute;
+    inset: 0;
+    border-radius: 999px;
+    background: rgba(148, 163, 184, .28);
+    transition: background .25s ease;
+}
+
+.cookie-switch i::after {
+    content: "";
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #fff;
+    transition: transform .25s cubic-bezier(.2, .7, .2, 1);
+}
+
+.cookie-switch input:checked + i {
+    background: #2563eb;
+}
+
+.cookie-switch input:checked + i::after {
+    transform: translateX(20px);
+}
+
+.cookie-switch input:disabled + i {
+    opacity: .6;
+}
+
+.cookie-switch input:focus-visible + i {
+    outline: 2px solid #7dd3fc;
+    outline-offset: 2px;
+}
+
+@media (max-width: 560px) {
+    .cookie-consent {
+        bottom: 12px;
+        padding: 20px 18px;
+    }
+
+    .cookie-actions {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .fw-blob,
+    .page-hero h1 span,
+    .js .page-hero-container > *,
+    .js .register-logo,
+    .js .register-heading,
+    .js .register-field,
+    .js .password-rules,
+    .js .terms-check,
+    .js .register-submit,
+    .js .register-login,
+    .js .profile-detail,
+    .vehicle-list .vehicle-card,
+    .history-list .history-card,
+    .login-modal-overlay.active .login-heading,
+    .login-modal-overlay.active .login-field,
+    .login-modal-overlay.active .login-submit,
+    .login-modal-overlay.active .forgot-password-link,
+    .login-modal-overlay.active .login-motto,
+    .login-modal::before,
+    .login-modal::after,
+    .register-card::before,
+    .story-panel::before,
+    .profile-avatar,
+    .status-chip::before,
+    .fw-pop {
+        animation: none;
+    }
+
+    .cookie-consent,
+    .cookie-options {
+        transition: none;
+    }
+}
+
+/* i18n trims the whitespace around inline links, so space them with CSS */
+.terms-check a {
+    margin-inline: .28em;
+}
