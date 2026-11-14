@@ -38,8 +38,19 @@ from catalog_curation import (  # noqa: E402
 )
 
 ENDPOINT = "https://discodata.eea.europa.eu/sql"
-TABLE = "[CO2Emission].[latest].[co2cars]"
-YEARS = range(2010, 2023)
+# 2010-2022 share one table; later years are published as one table per year
+# ("F" = final data, "P" = provisional). Add the next year's table here when EEA releases it.
+DEFAULT_TABLE = "[CO2Emission].[latest].[co2cars]"
+YEAR_TABLES = {
+    2023: "[CO2Emission].[latest].[co2cars_2023Fv28]",
+    2024: "[CO2Emission].[latest].[co2cars_2024Fv30]",
+    2025: "[CO2Emission].[latest].[co2cars_2025Pv31]",
+}
+LAST_DATA_YEAR = max(YEAR_TABLES)
+YEARS = range(2010, LAST_DATA_YEAR + 1)
+# Registrations are published the year after, so the current model year has no data yet.
+# Engines still on sale in the last data year are carried over to it and flagged.
+CATALOG_THROUGH_YEAR = 2026
 ROOT = Path(__file__).resolve().parents[2]
 CACHE_DIR = Path(__file__).parent / ".catalog-cache"
 OUTPUT = ROOT / "frontend" / "data" / "vehicle-catalog.json"
@@ -77,7 +88,7 @@ def query_range(prefix: str, year: int) -> list[dict] | None:
     query = (
         "SELECT DISTINCT Mk, Cn, Ft, Fm, [Ec (cm3)] AS ec, [Ep (KW)] AS kw, "
         "[E (g/km)] AS e, [Enedc (g/km)] AS nedc, [Ewltp (g/km)] AS wltp, Fc, Year "
-        f"FROM {TABLE} WHERE Mk BETWEEN '{prefix}' AND '{upper}' AND Year={year}"
+        f"FROM {YEAR_TABLES.get(year, DEFAULT_TABLE)} WHERE Mk BETWEEN '{prefix}' AND '{upper}' AND Year={year}"
     )
     rows: list[dict] = []
     page = 1
@@ -140,7 +151,7 @@ def auto_model(name: str) -> str | None:
         tokens = tokens[1:]
     if not tokens or not re.fullmatch(r"[A-Z0-9\-+]{2,12}", tokens[0]):
         return None
-    if re.match(r"^(.{2,5})", tokens[0]):  # "I30I30CW": two fields glued together
+    if re.match(r"^(.{2,5})\1", tokens[0]):  # "I30I30CW": two fields glued together
         return None
     joiners = {"GRAND", "SANTA", "SPACE", "ECLIPSE", "RANGE", "LAND", "C3", "C4", "C5", "YARIS", "COROLLA", "S", "SX4"}
     second_words = {"AIRCROSS", "CROSS", "CACTUS", "PICASSO", "SPACETOURER", "FE", "STAR", "ROVER", "CRUISER",
@@ -271,6 +282,9 @@ def build(offline: bool) -> dict:
                 }
                 if hybrid:
                     variant["hybrid"] = True
+                if variant["to"] == LAST_DATA_YEAR and CATALOG_THROUGH_YEAR > LAST_DATA_YEAR:
+                    variant["to"] = CATALOG_THROUGH_YEAR
+                    variant["carried"] = LAST_DATA_YEAR
                 variants_out.append(variant)
                 if fuel == "gasoline" and not hybrid:
                     variants_out.append({**variant, "fuel": "lpg", "official": None, "cycle": None,
@@ -308,7 +322,8 @@ def build(offline: bool) -> dict:
     catalog = {
         "meta": {
             "generated": date.today().isoformat(),
-            "source": "EEA CO2 emissions from new passenger cars (2010-2022); curated tanks and motorcycles",
+            "source": f"EEA CO2 emissions from new passenger cars (2010-{LAST_DATA_YEAR}); curated tanks and motorcycles",
+            "lastDataYear": LAST_DATA_YEAR,
             "realWorldFactor": REAL_WORLD_FACTOR,
             "lpgFactor": LPG_FACTOR,
             "lpgTank": LPG_TANK_LITRES,

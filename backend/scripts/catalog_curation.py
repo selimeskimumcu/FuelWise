@@ -15,6 +15,7 @@ MAKES = {
     "Alfa Romeo": ["ALFA ROMEO"],
     "Audi": ["AUDI"],
     "BMW": ["BMW"],
+    "Chery": ["CHERY"],
     "Chevrolet": ["CHEVROLET"],
     "Citroën": ["CITROEN"],
     "Cupra": ["CUPRA"],
@@ -23,6 +24,7 @@ MAKES = {
     "Ford": ["FORD"],
     "Honda": ["HONDA"],
     "Hyundai": ["HYUNDAI"],
+    "Jaecoo": ["JAECOO"],
     "Jeep": ["JEEP"],
     "Kia": ["KIA"],
     "Land Rover": ["LAND ROVER"],
@@ -38,7 +40,7 @@ MAKES = {
     "Renault": ["RENAULT"],
     "Seat": ["SEAT"],
     "Skoda": ["SKODA"],
-    "SsangYong": ["SSANGYONG"],
+    "SsangYong": ["SSANGYONG", "KGM", "KG MOBILITY"],  # renamed KGM in 2023
     "Subaru": ["SUBARU"],
     "Suzuki": ["SUZUKI"],
     "Toyota": ["TOYOTA"],
@@ -47,7 +49,7 @@ MAKES = {
 }
 
 # EEA lists these makes by trim ("320D", "A 180"), so only the curated patterns are used.
-AUTO_TIER_EXCLUDED_MAKES = {"Audi", "BMW", "Land Rover", "Mercedes-Benz", "Mini", "Porsche", "Volvo"}
+AUTO_TIER_EXCLUDED_MAKES = {"Audi", "BMW", "Chery", "Jaecoo", "Land Rover", "Mercedes-Benz", "Mini", "Porsche", "Volvo"}
 
 # Repairs for automatically derived model names: a new spelling, or None to drop the name.
 AUTO_MODEL_FIXES = {
@@ -178,3 +180,23 @@ MOTORCYCLES = {
         ("MT-07", 689, 4.3, 14), ("Tracer 7", 689, 4.3, 17), ("Ténéré 700", 689, 4.3, 16), ("MT-09", 890, 5.0, 14),
     ],
 }
+
+# Models launched from 2022 on. Inserted at the front so they win over older, more generic patterns.
+for _make, _models in {
+    "Chery": [("Tiggo 4", r"^TIGGO ?4", 51), ("Tiggo 7 Pro", r"^TIGGO ?7", 51), ("Tiggo 8 Pro", r"^TIGGO ?8", 51),
+              ("Omoda 5", r"^OMODA ?5", 51)],
+    "Citroën": [("C4 X", r"^C4 ?X\b", 50)],
+    "Cupra": [("Terramar", r"^TERRAMAR", 55)],
+    "Dacia": [("Bigster", r"^BIGSTER", 50)],
+    "Fiat": [("600", r"^600\b", 44), ("Grande Panda", r"^GRANDE PANDA", 44)],
+    "Honda": [("ZR-V", r"^ZR[- ]?V", 57)],
+    "Jaecoo": [("Jaecoo 7", r"^(J ?0?7|0?7)\b", 51), ("Jaecoo 5", r"^(J ?0?5|0?5)\b", 51)],
+    "Jeep": [("Avenger", r"^AVENGER", 44)],
+    "MG": [("MG3", r"^(MG ?)?3\b", 36)],
+    "Opel": [("Frontera", r"^FRONTERA", 44)],
+    "Peugeot": [("408", r"^408\b", 52)],
+    "Renault": [("Arkana", r"^ARKANA", 50), ("Symbioz", r"^SYMBIOZ", 48), ("Rafale", r"^RAFALE", 55)],
+    "SsangYong": [("Torres", r"^TORRES", 50)],
+    "Toyota": [("Aygo X", r"^AYGO ?X", 35)],
+}.items():
+    CURATED_MODELS.setdefault(_make, [])[:0] = _models

@@ -5,7 +5,7 @@
    const picker = FuelWiseCatalog.mount(container, { onSelect(vehicle) {}, onClear() {} });
    picker.reset(); */
 (() => {
-    const dataUrl = `${location.pathname.includes("/pages/") ? "../" : ""}data/vehicle-catalog.json?v=20261113-1`;
+    const dataUrl = `${location.pathname.includes("/pages/") ? "../" : ""}data/vehicle-catalog.json?v=20261114-1`;
 
     const copy = {
         en: {
@@ -20,6 +20,7 @@
             noteLpg: "Estimated from the petrol version of this engine: LPG burns about {percent}% more by volume. The tank size is a typical LPG tank; please check yours.",
             noteMotorcycle: "Typical everyday consumption for this model. You can still change the number below.",
             tankEstimated: "approximate, please check",
+            noteCarried: "Official {year} figures are not published yet, so this uses the {last} data for the same engine.",
             loading: "Loading catalogue…", failed: "The catalogue could not be loaded. You can enter the values by hand.",
             missing: "Can't find your vehicle? Enter the values by hand below."
         },
@@ -35,6 +36,7 @@
             noteLpg: "Bu motorun benzinli sürümünden hesaplandı: LPG hacimce yaklaşık %{percent} daha fazla yakar. Depo değeri tipik bir LPG tankıdır; lütfen kendi tankınızı kontrol edin.",
             noteMotorcycle: "Bu model için tipik günlük tüketim. Aşağıdaki değeri yine de değiştirebilirsiniz.",
             tankEstimated: "yaklaşık, lütfen kontrol edin",
+            noteCarried: "{year} için resmî veriler henüz yayımlanmadı; aynı motorun {last} verisi kullanıldı.",
             loading: "Katalog yükleniyor…", failed: "Katalog yüklenemedi. Değerleri elle girebilirsiniz.",
             missing: "Aracınızı bulamadınız mı? Değerleri aşağıya elle girin."
         },
@@ -50,6 +52,7 @@
             noteLpg: "Рассчитано по бензиновой версии этого двигателя: LPG расходуется примерно на {percent}% больше по объёму. Объём бака типичный для LPG; проверьте свой.",
             noteMotorcycle: "Типичный расход этой модели в реальной езде. Значение ниже можно изменить.",
             tankEstimated: "приблизительно, проверьте",
+            noteCarried: "Официальные данные за {year} год ещё не опубликованы, поэтому используются данные {last} года для того же двигателя.",
             loading: "Загрузка каталога…", failed: "Не удалось загрузить каталог. Введите значения вручную.",
             missing: "Не нашли свой транспорт? Введите значения вручную ниже."
         },
@@ -65,6 +68,7 @@
             noteLpg: "根据该发动机的汽油版本估算：LPG 按体积计约多消耗 {percent}%。油箱为典型 LPG 气罐容量，请核对您的气罐。",
             noteMotorcycle: "该车型的典型日常油耗。您仍可修改下方数值。",
             tankEstimated: "约值，请核对",
+            noteCarried: "{year} 年的官方数据尚未发布，因此使用同一发动机 {last} 年的数据。",
             loading: "正在加载目录…", failed: "目录加载失败，您可以手动输入数值。",
             missing: "没找到您的车辆？请在下方手动输入数值。"
         }
@@ -173,6 +177,7 @@
                 tankEstimated: isLpg || Boolean(model.tankEstimated),
                 hybrid: Boolean(variant.hybrid),
                 derived: Boolean(variant.derived),
+                carriedFrom: variant.carried && state.year && Number(state.year) > variant.carried ? variant.carried : null,
                 name: [make.name.replace(/ (Motor|Motorrad)$/, ""), model.name.split(" / ")[0], engine, isLpg ? "LPG" : ""].filter(Boolean).join(" ")
             };
         }
@@ -191,7 +196,7 @@
                         <div class="is-main"><span>${escapeHtml(text.real)}</span><strong>${chosen.consumption.toFixed(1)} <small>L/100 km</small></strong></div>
                         <div><span>${escapeHtml(text.tank)}${chosen.tankEstimated ? ` · ${escapeHtml(text.tankEstimated)}` : ""}</span><strong>${chosen.tankEstimated ? "≈ " : ""}${chosen.tank} <small>L</small></strong></div>
                     </div>
-                    <p class="catalog-note">${escapeHtml(note)}</p>
+                    <p class="catalog-note">${escapeHtml(note)}${chosen.carriedFrom ? ` ${escapeHtml(text.noteCarried.replace("{year}", chosen.year).replace("{last}", chosen.carriedFrom))}` : ""}</p>
                 </div>`;
         }
 
